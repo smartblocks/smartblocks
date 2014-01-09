@@ -8,6 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var fs = require('fs');
 
 var app = express();
 
@@ -26,15 +27,21 @@ app.use(app.router);
 app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var blocks_folders = fs.readdirSync(path.join(__dirname, 'blocks'));
+
+for (var k in blocks_folders) {
+    var block_folder = blocks_folders[k];
+    app.use('/' + block_folder, express.static(path.join(__dirname, 'blocks', block_folder, 'frontend')));
+}
+
 // development only
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
 app.get('/users', user.list);
 
-var config = require('./config');
+var config = require('./config')();
 
 var MongoClient = require('mongodb').MongoClient;
 
