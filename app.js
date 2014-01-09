@@ -38,7 +38,19 @@ var config = require('./config');
 
 var MongoClient = require('mongodb').MongoClient;
 
-MongoClient.connect(config.database.connection_str + "/" + config.database.name)
-http.createServer(app).listen(config.port, function(){
-  console.log('Express server listening on port ' + app.get('port'));
+MongoClient.connect(config.database.connection_str + "/" + config.database.name, function (err, db) {
+
+    if (err) {
+        console.log("There is no MongoDB server running");
+    } else {
+
+        var attachDB = function (req, res, next) {
+            req.db = db;
+            next();
+        };
+        http.createServer(app).listen(config.port, function(){
+            console.log('Express server listening on port ' + app.get('port'));
+        });
+    }
 });
+
