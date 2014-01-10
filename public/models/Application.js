@@ -4,7 +4,7 @@ define([
     'backbone'
 ], function ($, _, Backbone) {
     var Application = Backbone.Model.extend({
-        idAttribute: 'token',
+        idAttribute: 'name',
         defaults: {
         },
         initialize: function () {

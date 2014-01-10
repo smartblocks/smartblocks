@@ -87,9 +87,6 @@ define([
             },
             error: function () {
                 var user = new User();
-//                if (amplify.store("current_user")) {
-////                    user = new User(amplify.store("current_user"));
-//                }
                 if (user.get('id')) {
                     user.set("connected", true);
                 }

@@ -20,7 +20,7 @@ define([
 
             (function (block) {
                 SmartBlocks.Blocks[block.get("name")].Config = block.get('config');
-                require([block.get("name") + '/main'], function (main) {
+                require([block.get("name") + '/index'], function (main) {
                     if (main) {
                         if (main.init) {
                             init_list.push(main);
@@ -70,11 +70,9 @@ define([
             url: "/Configs",
             success: function (data, status) {
                 SmartBlocks.Config = data;
-//                amplify.store("sb.config", data);
                 after_config();
             },
             error: function () {
-//                SmartBlocks.Config = amplify.store("sb.config");
                 after_config();
             }
         });
@@ -90,6 +88,7 @@ define([
         }
         SmartBlocks.Methods.processed = 0;
         SmartBlocks.Blocks = {};
+
         for (var k in blocks.models) {
             var block = blocks.models[k];
             var types = block.get("types");
@@ -100,6 +99,7 @@ define([
                 Data: {},
                 Config: {}
             };
+            console.log(block.attributes);
             for (var t in types) {
                 var type = types[t];
                 SmartBlocks.Methods.addType(type, block);
@@ -122,7 +122,6 @@ define([
                 SmartBlocks.events.trigger("broadcastWs", message);
                 socket.emit('broadcast_message', message);
             }
-//            console.log(SmartBlocks);
         }
 
 
@@ -208,11 +207,13 @@ define([
                     SmartBlocks.Url.appname = appname;
                     SmartBlocks.Url.full = appname + "/" + params;
                     var app = SmartBlocks.Data.apps.where({
-                        token: appname
+                        name: appname
                     })[0];
-                    if (app && (!SmartBlocks.current_app || SmartBlocks.current_app.get("token") != app.get("token"))) {
-                        app = SmartBlocks.Data.apps.get(app.get('token'));
+                    if (app && (!SmartBlocks.current_app || SmartBlocks.current_app.get("name") != app.get("name"))) {
+                        app = SmartBlocks.Data.apps.get(app.get('name'));
                         SmartBlocks.Methods.setApp(app);
+                    } else {
+                        SmartBlocks.Methods.entry();
                     }
                 },
                 back: function () {
@@ -342,7 +343,7 @@ define([
             },
             render: function (view) {
                 var base = this;
-                $("#content").html(view);
+                $("body").html(view);
             },
             setApp: function (app) {
                 var base = this;
@@ -353,19 +354,22 @@ define([
             entry: function () {
                 if (!SmartBlocks.entry_app) {
                     var block = SmartBlocks.Data.blocks.where({
-                        token: SmartBlocks.Config.startup_app.block
+                        name: SmartBlocks.Config.startup_app.block
                     })[0];
+                    console.log(block);
                     if (block) {
-                        SmartBlocks.Url.params = SmartBlocks.Config.startup_app.url_params;
+
+                        SmartBlocks.Url.params = SmartBlocks.Config.startup_app.url_params || [];
                         var apps = new SmartBlocks.Collections.Applications(block.get('apps'));
                         var app = apps.where({
-                            token: SmartBlocks.Config.startup_app.app
+                            name: SmartBlocks.Config.startup_app.app
                         })[0];
 
+
                         if (app) {
-                            console.log(app);
-                            app = SmartBlocks.Data.apps.get(app.get('token'));
+                            app = SmartBlocks.Data.apps.get(app.get('name'));
                             SmartBlocks.entry_app = app;
+                            console.log(app);
                             SmartBlocks.Methods.setApp(SmartBlocks.entry_app);
                         }
                     }
@@ -410,10 +414,11 @@ define([
             },
             addType: function (type, block) {
                 (function (block) {
-                    require([type.model_location, type.collection_location], function (model, collection) {
+                    var collection_name = type.plural.charAt(0).toUpperCase() + type.plural.slice(1);
+                    require([block.get('name') + '/models/' + type.name, block.get('name') + '/collections/' + collection_name], function (model, collection) {
                         if (!block.get("restricted_to") || SmartBlocks.current_user.hasRight(block.get("restricted_to"))) {
-                            SmartBlocks.Blocks[block.get("name")].Models[type.model_name] = model;
-                            SmartBlocks.Blocks[block.get("name")].Collections[type.collection_name] = collection;
+                            SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;
+                            SmartBlocks.Blocks[block.get("name")].Collections[collection_name] = collection;
                             SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new collection();
                             SmartBlocks.Blocks[block.get("name")].Data[type.plural].fetch({
                                 success: function () {

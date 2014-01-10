@@ -1,6 +1,8 @@
-var BaseModel = require('./Base'),
-    crypto = require("crypto"), model = new BaseModel();;
+var mongoose = require('mongoose');
 
-module.exports = model.extend({
-    collection_name: 'users'
+var userSchema = mongoose.Schema({
+    email: {type: String, index: {unique: true}},
+    password: String
 });
+
+module.exports = mongoose.model('User', userSchema);

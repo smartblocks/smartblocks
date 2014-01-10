@@ -6,7 +6,7 @@ define([
         default: {
 
         },
-        urlRoot: ""
+        urlRoot: "/ControlPanel/Books"
     });
     return Model;
 });

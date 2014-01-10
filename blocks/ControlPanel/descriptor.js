@@ -8,6 +8,9 @@ module.exports = {
         }
     ],
     types: [
-        'Book'
+        {
+            name: 'Book',
+            plural: 'books'
+        }
     ]
 }

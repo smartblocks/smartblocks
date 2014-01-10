@@ -6,6 +6,18 @@ var smartblocks = {
         var blocks_folders = fs.readdirSync(path.join(__dirname, '..', 'blocks'));
         return blocks_folders;
     },
+    getBlocksModels: function () {
+        var blocks_folders = fs.readdirSync(path.join(__dirname, '..', 'blocks'));
+
+        var models = [];
+        for (var k in blocks_folders) {
+            var descriptor = require('../blocks/' + blocks_folders + '/descriptor');
+            if (descriptor) {
+                models.push(descriptor);
+            }
+        }
+        return models;
+    },
     getApplications: function (blockname) {
         var base = this;
         var blocks = base.getBlocks();
