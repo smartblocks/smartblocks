@@ -5,7 +5,7 @@ define([
 
         },
         launch_bookstore: function (app) {
-//            SmartBlocks.Methods.render('HELLOWORLD');
+            SmartBlocks.Methods.render('HELLOWORLD This is the bookstore app');
         }
     };
     return main;
