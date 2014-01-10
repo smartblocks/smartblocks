@@ -4,7 +4,7 @@ var config = {
         port: 3000,
         database: {
             connection_str: 'mongodb://127.0.0.1:27017',
-            name: 'fastdelivery_dev'
+            name: 'bookstore_dev'
         }
     },
     staging: {

@@ -1,4 +1,4 @@
-var Model = require('../lib/models/Base'),
+var Model = require('../smartblocks/models/Base'),
     dbMockup = {};
 describe("Models", function () {
     it("should create a new model", function (next) {

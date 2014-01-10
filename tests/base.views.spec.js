@@ -1,4 +1,4 @@
-var View = require('../lib/views/Base');
+var View = require('../smartblocks/views/Base');
 
 describe('Base view', function () {
     it ('should create and render new view', function (next) {
