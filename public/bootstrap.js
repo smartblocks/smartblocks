@@ -67,7 +67,7 @@ define([
     function load_config() {
         SmartBlocks.Methods.continueMainLoading(1, "Loading config");
         $.ajax({
-            url: "/Configs/front_end_config",
+            url: "/Configs",
             success: function (data, status) {
                 SmartBlocks.Config = data;
 //                amplify.store("sb.config", data);

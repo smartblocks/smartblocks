@@ -58,7 +58,7 @@ define([
     });
     User.getCurrent = function (callback) {
         $.ajax({
-            url: "/Users/current_user",
+            url: "/Users/action/current_user",
             success: function (data, status) {
                 if (!data.status || data.status != "error") {
                     var user = new User(data);
