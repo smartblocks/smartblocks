@@ -91,7 +91,10 @@ module.exports = {
                                 var user = users[0].toObject();
                                 delete user.password;
                                 req.session.user = user;
-                                res.send(200, 'Connected');
+                                users[0].session_id = req.session.session_id;
+                                users[0].save(function (err, user) {
+                                    res.send(200, 'Connected');
+                                });
                             } else {
                                 res.send(404, 'User not found');
                             }

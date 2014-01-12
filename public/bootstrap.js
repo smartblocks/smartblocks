@@ -107,17 +107,15 @@ define([
         }
 
         if (window.io) {
-            var socket = io.connect("http://" + SmartBlocks.Config.server_name + ":10001");
+            var socket = io.connect("/");
             socket.emit('set id', SmartBlocks.Config.session_id);
             socket.on('msg', function (data) {
                 SmartBlocks.events.trigger("ws_notification", data);
             });
             SmartBlocks.socket = socket;
-
             SmartBlocks.sendWs = function (session_id, message) {
                 socket.emit('send_message', session_id, message);
             };
-
             SmartBlocks.broadcastWs = function (message) {
                 SmartBlocks.events.trigger("broadcastWs", message);
                 socket.emit('broadcast_message', message);

@@ -1,4 +1,9 @@
 var config = {
+    all: {
+        site: {
+            title: "MYSITE"
+        }
+    },
     local: {
         mode: 'local',
         port: 3000,
@@ -34,5 +39,9 @@ var config = {
 };
 
 module.exports = function (mode) {
-    return config[mode || process.argv[2] || 'local'] || config.local;
+    var object = config[mode || process.argv[2] || 'local'] || config.local
+    for (var k in config.all) {
+        object[k] = config.all[k];
+    }
+    return object;
 };

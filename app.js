@@ -11,7 +11,7 @@ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'templates'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -37,7 +37,7 @@ var mongoose = require('mongoose');
 mongoose.connect(config.database.connection_str + '/' + config.database.name);
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error : '));
+db.on('error', console.error.bind(console, 'Database connection problem: '));
 db.once('open', function () {
     var attachDB = function (req, res, next) {
         req.db = db;
@@ -59,7 +59,6 @@ db.once('open', function () {
             (function (controller_name, controller) {
                 app.get('/' + block_folder + '/' + controller_name, attachDB, function (req, res) {
                     if (controller.index) {
-
                         controller.index(req, res);
                     }
                 });
@@ -133,7 +132,42 @@ db.once('open', function () {
 
     }
 
-    http.createServer(app).listen(config.port, function () {
-        console.log('Express server listening on port ' + app.get('port'));
+    app.all('/', function (req, res) {
+        res.render('index', {
+            site: config.site
+        });
     });
+    console.log(config);
+
+    var server = http.createServer(app);
+    server.listen(config.port, function () {
+        console.log('Express server listening on port ' + app.get('port'));
+
+    });
+
+    var io = require('socket.io').listen(server);
+
+    io.sockets.on('connection', function (socket) {
+        socket.on('set id', function (session_id) {
+            socket.set('id', session_id);
+        });
+
+        socket.on('send_message', function (session_id, message) {
+            var clients = io.sockets.clients();
+            for (var k in clients) {
+                var client = clients[k];
+                client.get('id', function (err, id) {
+                    if (id == session_id) {
+                        client.emit("msg", message);
+                    }
+                });
+            }
+        });
+
+        socket.on('broadcast_message', function (message) {
+            io.sockets.emit('msg', message);
+        });
+    });
+
+
 });
