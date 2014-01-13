@@ -1,0 +1,3 @@
+describe('smartblocks', function () {
+
+});
