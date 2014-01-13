@@ -11,6 +11,7 @@ define([
     var temp = {};
     var init_list = [];
 
+
     function init_blocks() {
         var blocks = SmartBlocks.Data.blocks;
         var blocks_count = blocks.length;
@@ -21,7 +22,6 @@ define([
             (function (block) {
                 SmartBlocks.Blocks[block.get("name")].Config = block.get('config');
                 require([block.get("name") + '/index'], function (main) {
-
                     if (main) {
                         if (main.init) {
                             init_list.push(main);
@@ -103,6 +103,9 @@ define([
             for (var t in types) {
                 var type = types[t];
                 SmartBlocks.Methods.addType(type, block);
+            }
+            if (types.length == 0) {
+                init_blocks();
             }
         }
 
@@ -413,6 +416,7 @@ define([
             addType: function (type, block) {
                 (function (block) {
                     var collection_name = type.plural.charAt(0).toUpperCase() + type.plural.slice(1);
+
                     require([block.get('name') + '/models/' + type.name, block.get('name') + '/collections/' + collection_name], function (model, collection) {
                         if (!block.get("restricted_to") || SmartBlocks.current_user.hasRight(block.get("restricted_to"))) {
                             SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;

@@ -21,10 +21,6 @@ module.exports = function () {
     }
 
     if (program.init) {
-
-
         smartblocks.cli().createProjectStructure(program.init);
-
-
     }
 };
