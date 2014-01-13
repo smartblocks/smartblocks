@@ -2,6 +2,12 @@ var config = {
     all: {
         site: {
             title: "MYSITE"
+        },
+        frontend: {
+            startup_app: {
+                block: 'ControlPanel',
+                app: 'BookStore'
+            }
         }
     },
     local: {
