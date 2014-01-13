@@ -99,7 +99,6 @@ define([
                 Data: {},
                 Config: {}
             };
-            console.log(block.attributes);
             for (var t in types) {
                 var type = types[t];
                 SmartBlocks.Methods.addType(type, block);
@@ -238,7 +237,6 @@ define([
                     base.keydown_list = {};
 
                     $(document).bind("keydown", function (e) {
-                        console.log(e.keyCode);
                         base.keydown_list[e.keyCode] = true;
                         var active_keys = [];
                         for (var k in base.keydown_list) {
@@ -357,7 +355,6 @@ define([
                     var block = SmartBlocks.Data.blocks.where({
                         name: SmartBlocks.Config.startup_app.block
                     })[0];
-                    console.log(block);
                     if (block) {
 
                         SmartBlocks.Url.params = SmartBlocks.Config.startup_app.url_params || [];
@@ -370,7 +367,6 @@ define([
                         if (app) {
                             app = SmartBlocks.Data.apps.get(app.get('name'));
                             SmartBlocks.entry_app = app;
-                            console.log(app);
                             SmartBlocks.Methods.setApp(SmartBlocks.entry_app);
                         }
                     }

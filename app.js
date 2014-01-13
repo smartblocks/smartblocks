@@ -3,7 +3,6 @@
  */
 module.exports = function () {
 
-    console.log("RUNNING PATH", process.cwd());
     var express = require('express');
     var http = require('http');
     var path = require('path');
@@ -19,13 +18,13 @@ module.exports = function () {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
     app.use(express.favicon());
-    app.use(express.logger('dev'));
+//    app.use(express.logger('dev'));
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
     app.use(express.session());
-    app.use(express.bodyParser());
+//    app.use(express.bodyParser());
     app.use(app.router);
     app.use(require('less-middleware')({ src: path.join(__dirname, 'public/build') }));
     app.use(express.static(path.join(__dirname, 'public/build')));
@@ -144,14 +143,13 @@ module.exports = function () {
                 site: config.site
             });
         });
-        console.log(config);
 
         var server = http.createServer(app);
         server.listen(config.port, function () {
             console.log('Express server listening on port ' + app.get('port'));
         });
 
-        var io = require('socket.io').listen(server);
+        var io = require('socket.io').listen(server, { log: false });
 
         io.sockets.on('connection', function (socket) {
             socket.on('set id', function (session_id) {
