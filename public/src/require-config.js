@@ -10,7 +10,8 @@ requirejs.config({
         Class: 'tools/Class',
         LoadingTemplate: "templates/loading.html",
         LoadingScreen: "views/LoadingScreen",
-        sb_basics: "tools/sb_basics"
+        sb_basics: "tools/sb_basics",
+        less: 'libs/less'
 
     },
     shim: {
