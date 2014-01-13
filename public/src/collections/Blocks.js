@@ -1,8 +1,8 @@
 define([
     "underscore",
     "backbone",
-    "Models/Block",
-    "Models/Application"
+    "models/Block",
+    "models/Application"
 ], function (_, Backbone, Block, Application) {
     var BlocksCollection = Backbone.Collection.extend({
         url:"/Blocks",

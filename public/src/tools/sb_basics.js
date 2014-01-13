@@ -2,10 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Models/Block',
-    'Models/Application',
-    'Collections/Blocks',
-    'Collections/Applications'
+    'models/Block',
+    'models/Application',
+    'collections/Blocks',
+    'collections/Applications'
 ], function ($, _, Backbone, Block, Application, Blocks, Applications) {
 
     var func_set = {

@@ -1,0 +1,15 @@
+{
+  "name": "SmartBlocks-frontend",
+  "version": "0.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Antoine Jackson",
+  "license": "AGPL",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-requirejs": "~0.4.1"
+  }
+}

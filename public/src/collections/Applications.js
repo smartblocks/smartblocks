@@ -1,7 +1,7 @@
 define([
     "underscore",
     "backbone",
-    "Models/Application"
+    "models/Application"
 ], function (_, Backbone, Application) {
     var ApplicationsCollection = Backbone.Collection.extend({
         url: "/Applications",
