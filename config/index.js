@@ -5,8 +5,8 @@ var config = {
         },
         frontend: {
             startup_app: {
-                block: 'ControlPanel',
-                app: 'BookStore'
+                block: 'main',
+                app: 'home'
             }
         }
     },

@@ -21,6 +21,7 @@ define([
             (function (block) {
                 SmartBlocks.Blocks[block.get("name")].Config = block.get('config');
                 require([block.get("name") + '/index'], function (main) {
+
                     if (main) {
                         if (main.init) {
                             init_list.push(main);
@@ -29,8 +30,6 @@ define([
                             SmartBlocks.Blocks[block.get("name")].Methods = main.methods;
                         }
                         SmartBlocks.Blocks[block.get("name")].Main = main;
-
-
                     }
 
                     processed_blocks++;
@@ -40,6 +39,7 @@ define([
                         for (var k in init_list) {
                             init_list[k].init();
                         }
+
                         SmartBlocks.events.trigger("start_solution");
                     }
                 });

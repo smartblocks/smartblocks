@@ -149,7 +149,6 @@ module.exports = function () {
         var server = http.createServer(app);
         server.listen(config.port, function () {
             console.log('Express server listening on port ' + app.get('port'));
-
         });
 
         var io = require('socket.io').listen(server);
