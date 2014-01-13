@@ -1,6 +1,5 @@
 {
     "name": "smartblocks",
-    "description": "Smartblocks allows you to create modular single page web applications, dividing them into reusable blocks",
     "version": "0.0.1",
     "private": true,
     "scripts": {
@@ -20,7 +19,8 @@
         "commander": "~2.1.0",
         "socket.io": "~0.9.16",
         "rewire": "~2.0.0",
-        "ncp": "~0.5.0"
+        "ncp": "~0.5.0",
+        "handlebars": "~1.3.0"
     },
     "devDependencies": {
         "grunt": "~0.4.2",

@@ -35,7 +35,7 @@ module.exports = function () {
         app.use(express.errorHandler());
     }
 
-    var config = require(path.join(process.cwd(),  'config'))();
+    var config = require(path.join(process.cwd(), 'config'))();
 
     var mongoose = require('mongoose');
 
@@ -61,7 +61,7 @@ module.exports = function () {
 
             for (var c in controllers) {
                 var controller_name = controllers[c].replace('.js', '');
-                var controller = require(path.join(process.cwd(),  'blocks', block_folder, 'backend', 'controllers', controller_name));
+                var controller = require(path.join(process.cwd(), 'blocks', block_folder, 'backend', 'controllers', controller_name));
                 (function (controller_name, controller) {
                     app.get('/' + block_folder + '/' + controller_name, attachDB, function (req, res) {
                         if (controller.index) {

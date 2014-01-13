@@ -1,0 +1,10 @@
+module.exports = {
+    name: "{{name}}",
+    description: "",
+    apps : [
+        {
+        }
+    ],
+    types: [
+    ]
+}

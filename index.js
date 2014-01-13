@@ -13,11 +13,16 @@ module.exports = function () {
         .version(pkg.version)
         .option('start', 'Start application')
         .option('init [name]', 'Create a new SmartBlocks project in the folder [name]')
+        .option('create_block [name]', 'Create a new block structure in the folder blocks / [name]')
         .parse(process.argv);
 
     if (program.start)  {
         console.log('Web app starting, use Ctr-C to stop');
         app_starter();
+    }
+
+    if (program.create_block) {
+        smartblocks.createBlock(program.create_block);
     }
 
     if (program.init) {
