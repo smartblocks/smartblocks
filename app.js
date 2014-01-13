@@ -3,13 +3,16 @@
  */
 module.exports = function () {
 
-
+    console.log("RUNNING PATH", process.cwd());
     var express = require('express');
     var http = require('http');
     var path = require('path');
     var fs = require('fs');
 
     var app = express();
+
+    var app_path =
+
 
 // all environments
     app.set('port', process.env.PORT || 3000);
@@ -33,7 +36,7 @@ module.exports = function () {
         app.use(express.errorHandler());
     }
 
-    var config = require('./config')();
+    var config = require(path.join(process.cwd(),  'config'))();
 
     var mongoose = require('mongoose');
 
@@ -49,17 +52,17 @@ module.exports = function () {
         };
 
 
-        var blocks_folders = fs.readdirSync(path.join(__dirname, 'blocks'));
+        var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
 //blocks webservices
         for (var k in blocks_folders) {
             var block_folder = blocks_folders[k];
-            app.use('/' + block_folder, express.static(path.join(__dirname, 'blocks', block_folder, 'frontend')));
-            var backend_path = path.join(__dirname, 'blocks', block_folder, 'backend');
+            app.use('/' + block_folder, express.static(path.join(process.cwd(), 'blocks', block_folder, 'frontend')));
+            var backend_path = path.join(process.cwd(), 'blocks', block_folder, 'backend');
             var controllers = fs.readdirSync(path.join(backend_path, 'controllers'));
 
             for (var c in controllers) {
                 var controller_name = controllers[c].replace('.js', '');
-                var controller = require('./blocks/' + block_folder + '/backend/controllers/' + controller_name);
+                var controller = require(path.join(process.cwd(),  'blocks', block_folder, 'backend', 'controllers', controller_name));
                 (function (controller_name, controller) {
                     app.get('/' + block_folder + '/' + controller_name, attachDB, function (req, res) {
                         if (controller.index) {

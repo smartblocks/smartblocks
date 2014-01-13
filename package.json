@@ -13,7 +13,8 @@
     "underscore": "1.5.2",
     "bcryptjs": "~0.7.10",
     "mongoose": "~3.8.4",
-    "commander": "~2.1.0"
+    "commander": "~2.1.0",
+    "socket.io": "~0.9.16"
   },
   "devDependencies": {
     "grunt": "~0.4.2",

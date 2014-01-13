@@ -1,9 +1,10 @@
 var app_starter = require('./app');
 var fs = require('fs');
+var path = require('path');
 
 
 var program = require('commander');
-var pkg = JSON.parse(fs.readFileSync('./package.json'));
+var pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json')));
 module.exports = function () {
     program
         .version(pkg.version)
