@@ -1,12 +1,12 @@
-module.exports = {
-    name: "main",
-    description: "",
-    apps : [
+{
+    "name": "main",
+    "description": "",
+    "apps": [
         {
-            name: "home",
-            entry_point: "launch_home"
+            "name": "home",
+            "entry_point": "launch_home"
         }
     ],
-    types: [
+    "types": [
     ]
 }
