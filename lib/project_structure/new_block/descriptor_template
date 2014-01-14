@@ -1,10 +1,10 @@
-module.exports = {
-    name: "{{name}}",
-    description: "",
-    apps : [
+{
+    "name" : "{{name}}",
+    "description" : "",
+    "apps" : [
         {
         }
     ],
-    types: [
+    "types": [
     ]
 }
