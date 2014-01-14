@@ -18,7 +18,6 @@ define([
                 }
                 models[k].set("apps", new_array);
             }
-            console.log(base);
         },
         parse:function (response, status) {
             for (var k in response) {
@@ -32,7 +31,6 @@ define([
 
                 response[k].apps = applications;
             }
-//            console.log(response);
             return response;
         }
     });

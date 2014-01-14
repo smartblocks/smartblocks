@@ -1,7 +1,8 @@
 var rewire = require('rewire');
 var os = require('os');
 var smartblocks = rewire('../lib/smartblocks');
-
+var fs = require('fs');
+var path = require('path');
 var cwd_representation = {};
 var cwd = process.cwd();
 var insert_in_directory = function (directory_object, path, depth) {
@@ -20,7 +21,6 @@ var insert_file_in_directory = function (directory_object, path, content, depth)
 };
 var fs_stub = {
     readdir: function (path, callback) {
-        console.log('fs.readdir stub called')
         callback(null, [])
     },
     mkdir: function (path, callback) {
@@ -46,10 +46,9 @@ var fs_stub = {
     }
 };
 smartblocks.__set__('fs', fs_stub);
-smartblocks.__set__('ncp', {
-    ncp: function () {
 
-    }
+smartblocks.__set__('ncp', function (param1, param2) {
+
 });
 
 describe('smartblocks cli', function (next) {
@@ -57,14 +56,12 @@ describe('smartblocks cli', function (next) {
         cwd_representation = {};
         var cli = smartblocks.cli();
         cli.createProjectStructure('PROJECT');
-        console.log(cwd_representation);
         expect(cwd_representation).toEqual({
             'PROJECT': {
-                'blocks': {},
                 'config': {
                     'index.js': 'file_contents'
                 },
-                'package.json' : 'file_contents'
+                'package.json': 'file_contents'
             }
         });
     });

@@ -21,13 +21,11 @@ define([
                     base.ready = false;
                     var block = SmartBlocks.Data.blocks.get(base.get("block_token"));
                     var main = SmartBlocks.Blocks[block.get('name')].Main;
-                    console.log(base.get("block_token"), block, main);
                     if (main[base.get("entry_point")]) {
                         main[base.get("entry_point")](base);
                         base.events.trigger("ready");
                         SmartBlocks.current_app = base;
                         base.routeit();
-                        console.log(base);
                     }
                     base.ready = true;
 

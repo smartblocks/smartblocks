@@ -4,7 +4,8 @@ requirejs([
     "UserModel",
     "UsersCollection",
     "LoadingScreen",
-    "bootstrap"
+    "bootstrap",
+    'less'
 ], function (_, Backbone, User, UsersCollection, LoadingScreen, bootstrap) {
 
         bootstrap.init(function () {
