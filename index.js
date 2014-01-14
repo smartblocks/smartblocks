@@ -22,7 +22,7 @@ module.exports = function () {
     }
 
     if (program.create_block) {
-        smartblocks.createBlock(program.create_block);
+        smartblocks.cli().createBlock(program.create_block);
     }
 
     if (program.init) {
