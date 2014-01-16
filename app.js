@@ -7,11 +7,12 @@ module.exports = function () {
     var http = require('http');
     var path = require('path');
     var fs = require('fs');
+    var os = require('os');
 
     var app = express();
 
 // all environments
-    app.set('port', process.env.PORT || 3000);
+        app.set('port', process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
     app.use(express.favicon());
@@ -144,7 +145,13 @@ module.exports = function () {
 
         var server = http.createServer(app);
         server.listen(config.port, function () {
-            console.log('Express server listening on port ' + app.get('port'));
+            console.log(' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n\n' +
+                ' SMART BLOCKS\nRunning on ' + app.get('port'));
         });
 
         var io = require('socket.io').listen(server, { log: false });

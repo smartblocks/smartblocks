@@ -88,11 +88,10 @@ define([
         }
         SmartBlocks.Methods.processed = 0;
         SmartBlocks.Blocks = {};
-
+        var types_count = 0;
         for (var k in blocks.models) {
             var block = blocks.models[k];
             var types = block.get("types");
-
             SmartBlocks.Blocks[block.get("name")] = {
                 Models: {},
                 Collections: {},
@@ -102,10 +101,12 @@ define([
             for (var t in types) {
                 var type = types[t];
                 SmartBlocks.Methods.addType(type, block);
+                types_count++;
             }
-            if (types.length == 0) {
-                init_blocks();
-            }
+
+        }
+        if (types_count == 0) {
+            init_blocks();
         }
 
         if (window.io) {
