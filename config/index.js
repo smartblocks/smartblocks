@@ -14,7 +14,7 @@ var config = {
         mode: 'local',
         port: 3000,
         database: {
-            db_driver: 'mongoose',
+            dbdriver: 'mongoose',
             connection_str: 'mongodb://127.0.0.1:27017',
             name: 'bookstore_dev'
         }
@@ -23,7 +23,7 @@ var config = {
         mode: 'staging',
         port: 4000,
         database: {
-            db_driver: 'mongoose',
+            dbdriver: 'mongoose',
             connection_str: 'mongodb://127.0.0.1:27017',
             name: 'fastdelivery_staging'
         }
@@ -32,7 +32,7 @@ var config = {
         mode: 'production',
         port: 5000,
         database: {
-            db_driver: 'mongoose',
+            dbdriver: 'mongoose',
             connection_str: 'mongodb://127.0.0.1:27017',
             name: 'fastdelivery'
         }
@@ -41,7 +41,7 @@ var config = {
         mode: 'tests',
         port: 5000,
         database: {
-            db_driver: 'mongoose',
+            dbdriver: 'mongoose',
             connection_str: 'mongodb://127.0.0.1:27017',
             name: 'fastdelivery_tests'
         }

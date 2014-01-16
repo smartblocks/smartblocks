@@ -16,7 +16,7 @@ module.exports = function () {
         .option('create_block [name]', 'Create a new block structure in the folder blocks / [name]')
         .parse(process.argv);
 
-    if (program.start)  {
+    if (program.start) {
         console.log('Web app starting, use Ctr-C to stop');
         app_starter();
     }
@@ -26,6 +26,9 @@ module.exports = function () {
     }
 
     if (program.init) {
+        if (program.init === true) {
+            program.init = '.';
+        }
         smartblocks.cli().createProjectStructure(program.init);
     }
 };

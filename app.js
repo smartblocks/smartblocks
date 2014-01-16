@@ -11,8 +11,11 @@ module.exports = function () {
 
     var app = express();
 
+    var config = require(path.join(process.cwd(), 'config'))();
+
 // all environments
-        app.set('port', process.env.PORT || 3000);
+    app.set('port', config.port || process.env.PORT || 3000);
+//    app.set('port', process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
     app.use(express.favicon());
@@ -33,9 +36,8 @@ module.exports = function () {
         app.use(express.errorHandler());
     }
 
-    var config = require(path.join(process.cwd(), 'config'))();
 
-    var db_driver = require(path.join(process.cwd(), 'lib', 'data_access', 'dbdriver_' + config.database.db_driver))();
+    var db_driver = require(path.join(__dirname, 'lib', 'data_access', "dbdriver_" + config.database.dbdriver));
     db = db_driver.connect(config);
 
 //    var mongoose = require('mongoose');
