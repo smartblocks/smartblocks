@@ -30,34 +30,30 @@ module.exports = function () {
     app.use(require('less-middleware')({ src: path.join(__dirname, 'public/build') }));
     app.use(express.static(path.join(__dirname, 'public/build')));
 
-
 // development only
     if ('development' == app.get('env')) {
         app.use(express.errorHandler());
     }
 
-
+// [begin] Connection to DataBase depending on dbdriver defined in config/index.js   ****/
     var db_driver = require(path.join(__dirname, 'lib', 'data_access', "dbdriver_" + config.database.dbdriver));
     db = db_driver.connect(config);
-
-//    var mongoose = require('mongoose');
-//    mongoose.connect(config.database.connection_str + '/' + config.database.name);
-//    var db = mongoose.connection;
-
     db.on('error', console.error.bind(console, 'Database connection problem: '));
     db.once('open', function () {
         var attachDB = function (req, res, next) {
             req.db = db;
             next();
         };
+//  [end] Connection to DataBase depending on dbdriver defined in config/index.js   ****/
 
-
+// [begin] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
         var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
-//blocks webservices
+//backend blocks webservices
         for (var k in blocks_folders) {
             var block_folder = blocks_folders[k];
-            app.use('/' + block_folder, express.static(path.join(process.cwd(), 'blocks', block_folder, 'frontend')));
+            var frontend_path = path.join(process.cwd(), 'blocks', block_folder, 'frontend');
             var backend_path = path.join(process.cwd(), 'blocks', block_folder, 'backend');
+            app.use('/' + block_folder, express.static(frontend_path));
             var controllers = fs.readdirSync(path.join(backend_path, 'controllers'));
 
             for (var c in controllers) {
@@ -98,7 +94,7 @@ module.exports = function () {
             }
         }
 
-//kernel webservices
+//lib kernel webservices
         var controllers = fs.readdirSync(path.join(__dirname, 'lib', 'controllers'));
         for (var c in controllers) {
             var controller_name = controllers[c].replace('.js', '');
@@ -135,9 +131,8 @@ module.exports = function () {
                     }
                 });
             })(controller_name, controller);
-
-
         }
+// [end] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
 
         app.all('/', function (req, res) {
             res.render('index', {
