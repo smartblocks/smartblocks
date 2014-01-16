@@ -10,9 +10,6 @@ module.exports = function () {
 
     var app = express();
 
-    var app_path =
-
-
 // all environments
     app.set('port', process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
@@ -37,12 +34,13 @@ module.exports = function () {
 
     var config = require(path.join(process.cwd(), 'config'))();
 
-    var mongoose = require('mongoose');
+    var db_driver = require(path.join(process.cwd(), 'lib', 'data_access', 'dbdriver_' + config.database.db_driver))();
+    db = db_driver.connect(config);
 
+//    var mongoose = require('mongoose');
+//    mongoose.connect(config.database.connection_str + '/' + config.database.name);
+//    var db = mongoose.connection;
 
-    mongoose.connect(config.database.connection_str + '/' + config.database.name);
-
-    var db = mongoose.connection;
     db.on('error', console.error.bind(console, 'Database connection problem: '));
     db.once('open', function () {
         var attachDB = function (req, res, next) {
