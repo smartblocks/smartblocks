@@ -8,6 +8,8 @@ for the front-end. To hold data, it is currently based on MongoDB.
 
 ##Getting started
 
+###Installation
+
 > Please make sure you installed MongoDB and that it is running before trying to start the web app.
 
 To install and try the current developer nightly of SmartBlocks, run the following command :
@@ -39,6 +41,20 @@ You should see something like this in the console :
     Running on 3000
 
 You can then go to [http://localhost:3000][1]. You should see a welcome page.
+
+###How to use
+
+####Directory structure
+
+
+####Managing the main block
+
+####Creating your own first block
+
+#####Back end
+
+
+#####Front end
 
 
 [1]:http://localhost:3000
