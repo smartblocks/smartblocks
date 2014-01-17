@@ -1,0 +1,12 @@
+module.exports = {
+    name: "main",
+    description: "",
+    apps : [
+        {
+            name: "home",
+            entry_point: "launch_home"
+        }
+    ],
+    types: [
+    ]
+}

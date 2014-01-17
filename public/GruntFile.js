@@ -11,10 +11,20 @@ module.exports = function(grunt) {
                     out: 'build/smartblocks-frontend.js'
                 }
             }
+        },
+        watch: {
+            scripts: {
+                files: 'src/*.js',
+                tasks: ['requirejs'],
+                options: {
+                    interrupt: true
+                }
+            }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     // Default task(s).
     grunt.registerTask('default', ['requirejs']);

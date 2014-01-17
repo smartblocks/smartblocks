@@ -11,6 +11,7 @@ define([
     var temp = {};
     var init_list = [];
 
+
     function init_blocks() {
         var blocks = SmartBlocks.Data.blocks;
         var blocks_count = blocks.length;
@@ -29,8 +30,6 @@ define([
                             SmartBlocks.Blocks[block.get("name")].Methods = main.methods;
                         }
                         SmartBlocks.Blocks[block.get("name")].Main = main;
-
-
                     }
 
                     processed_blocks++;
@@ -40,6 +39,7 @@ define([
                         for (var k in init_list) {
                             init_list[k].init();
                         }
+
                         SmartBlocks.events.trigger("start_solution");
                     }
                 });
@@ -88,22 +88,25 @@ define([
         }
         SmartBlocks.Methods.processed = 0;
         SmartBlocks.Blocks = {};
-
+        var types_count = 0;
         for (var k in blocks.models) {
             var block = blocks.models[k];
             var types = block.get("types");
-
             SmartBlocks.Blocks[block.get("name")] = {
                 Models: {},
                 Collections: {},
                 Data: {},
                 Config: {}
             };
-            console.log(block.attributes);
             for (var t in types) {
                 var type = types[t];
                 SmartBlocks.Methods.addType(type, block);
+                types_count++;
             }
+
+        }
+        if (types_count == 0) {
+            init_blocks();
         }
 
         if (window.io) {
@@ -235,7 +238,6 @@ define([
                     base.keydown_list = {};
 
                     $(document).bind("keydown", function (e) {
-                        console.log(e.keyCode);
                         base.keydown_list[e.keyCode] = true;
                         var active_keys = [];
                         for (var k in base.keydown_list) {
@@ -354,7 +356,6 @@ define([
                     var block = SmartBlocks.Data.blocks.where({
                         name: SmartBlocks.Config.startup_app.block
                     })[0];
-                    console.log(block);
                     if (block) {
 
                         SmartBlocks.Url.params = SmartBlocks.Config.startup_app.url_params || [];
@@ -367,7 +368,6 @@ define([
                         if (app) {
                             app = SmartBlocks.Data.apps.get(app.get('name'));
                             SmartBlocks.entry_app = app;
-                            console.log(app);
                             SmartBlocks.Methods.setApp(SmartBlocks.entry_app);
                         }
                     }
@@ -413,6 +413,7 @@ define([
             addType: function (type, block) {
                 (function (block) {
                     var collection_name = type.plural.charAt(0).toUpperCase() + type.plural.slice(1);
+
                     require([block.get('name') + '/models/' + type.name, block.get('name') + '/collections/' + collection_name], function (model, collection) {
                         if (!block.get("restricted_to") || SmartBlocks.current_user.hasRight(block.get("restricted_to"))) {
                             SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;

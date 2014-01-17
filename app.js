@@ -3,63 +3,62 @@
  */
 module.exports = function () {
 
-
     var express = require('express');
     var http = require('http');
     var path = require('path');
     var fs = require('fs');
+    var os = require('os');
 
     var app = express();
 
+    var config = require(path.join(process.cwd(), 'config'))();
+
 // all environments
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', config.port || process.env.PORT || 3000);
+//    app.set('port', process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
     app.use(express.favicon());
-    app.use(express.logger('dev'));
+//    app.use(express.logger('dev'));
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(express.methodOverride());
     app.use(express.cookieParser('your secret here'));
     app.use(express.session());
-    app.use(express.bodyParser());
+//    app.use(express.bodyParser());
     app.use(app.router);
     app.use(require('less-middleware')({ src: path.join(__dirname, 'public/build') }));
     app.use(express.static(path.join(__dirname, 'public/build')));
-
 
 // development only
     if ('development' == app.get('env')) {
         app.use(express.errorHandler());
     }
 
-    var config = require('./config')();
-
-    var mongoose = require('mongoose');
-
-
-    mongoose.connect(config.database.connection_str + '/' + config.database.name);
-
-    var db = mongoose.connection;
+// [begin] Connection to DataBase depending on dbdriver defined in config/index.js   ****/
+    var db_driver = require(path.join(__dirname, 'lib', 'data_access', "dbdriver_" + config.database.dbdriver));
+    db = db_driver.connect(config);
     db.on('error', console.error.bind(console, 'Database connection problem: '));
     db.once('open', function () {
         var attachDB = function (req, res, next) {
             req.db = db;
             next();
         };
+//  [end] Connection to DataBase depending on dbdriver defined in config/index.js   ****/
 
-
-        var blocks_folders = fs.readdirSync(path.join(__dirname, 'blocks'));
-//blocks webservices
+// [begin] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
+        var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
+//backend blocks webservices
         for (var k in blocks_folders) {
             var block_folder = blocks_folders[k];
-            app.use('/' + block_folder, express.static(path.join(__dirname, 'blocks', block_folder, 'frontend')));
-            var backend_path = path.join(__dirname, 'blocks', block_folder, 'backend');
+            var frontend_path = path.join(process.cwd(), 'blocks', block_folder, 'frontend');
+            var backend_path = path.join(process.cwd(), 'blocks', block_folder, 'backend');
+            app.use('/' + block_folder, express.static(frontend_path));
             var controllers = fs.readdirSync(path.join(backend_path, 'controllers'));
 
             for (var c in controllers) {
                 var controller_name = controllers[c].replace('.js', '');
-                var controller = require('./blocks/' + block_folder + '/backend/controllers/' + controller_name);
+                var controller = require(path.join(process.cwd(), 'blocks', block_folder, 'backend', 'controllers', controller_name));
                 (function (controller_name, controller) {
                     app.get('/' + block_folder + '/' + controller_name, attachDB, function (req, res) {
                         if (controller.index) {
@@ -95,7 +94,7 @@ module.exports = function () {
             }
         }
 
-//kernel webservices
+//lib kernel webservices
         var controllers = fs.readdirSync(path.join(__dirname, 'lib', 'controllers'));
         for (var c in controllers) {
             var controller_name = controllers[c].replace('.js', '');
@@ -132,24 +131,27 @@ module.exports = function () {
                     }
                 });
             })(controller_name, controller);
-
-
         }
+// [end] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
 
         app.all('/', function (req, res) {
             res.render('index', {
                 site: config.site
             });
         });
-        console.log(config);
 
         var server = http.createServer(app);
         server.listen(config.port, function () {
-            console.log('Express server listening on port ' + app.get('port'));
-
+            console.log(' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n\n' +
+                ' SMART BLOCKS\nRunning on ' + app.get('port'));
         });
 
-        var io = require('socket.io').listen(server);
+        var io = require('socket.io').listen(server, { log: false });
 
         io.sockets.on('connection', function (socket) {
             socket.on('set id', function (session_id) {

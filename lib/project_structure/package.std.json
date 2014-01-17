@@ -1,0 +1,11 @@
+{
+    "name": "SITE_NAME",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "smartblocks start"
+    },
+    "dependencies": {
+        "smartblocks": "~0.0.1"
+    }
+}
