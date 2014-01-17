@@ -9,5 +9,6 @@
     <script type="text/javascript" src="/require-config.js"></script>
 </head>
 <body>
+<div id="__contents__"></div>
 </body>
 </html>

@@ -343,7 +343,7 @@ define([
             },
             render: function (view) {
                 var base = this;
-                $("body").html(view);
+                $("#__contents__").html(view);
             },
             setApp: function (app) {
                 var base = this;
