@@ -1,32 +1,36 @@
 {
-  "name": "smartblocks",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
-  "bin": {
-    "smartblocks": "smartblocks"
-  },
-  "dependencies": {
-    "express": "3.4.7",
-    "hjs": "*",
-    "less-middleware": "*",
-    "mongodb": "1.3.10",
-    "underscore": "1.5.2",
-    "bcryptjs": "~0.7.10",
-    "mongoose": "~3.8.4",
-    "commander": "~2.1.0",
-    "socket.io": "~0.9.16",
-    "rewire": "~2.0.0",
-    "ncp": "~0.5.0",
-    "handlebars": "~1.3.0",
-    "async": "~0.2.9"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.2",
-    "grunt-contrib-requirejs": "~0.4.1"
-  },
-  "author": "Antoine Jackson",
-  "license": "AGPL"
+    "name": "smartblocks",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "bin": {
+        "smartblocks": "smartblocks"
+    },
+    "dependencies": {
+        "express": "3.4.7",
+        "hjs": "*",
+        "less-middleware": "*",
+        "mongodb": "1.3.10",
+        "underscore": "1.5.2",
+        "bcryptjs": "~0.7.10",
+        "mongoose": "~3.8.4",
+        "commander": "~2.1.0",
+        "socket.io": "~0.9.16",
+        "rewire": "~2.0.0",
+        "ncp": "~0.5.0",
+        "handlebars": "~1.3.0",
+        "async": "~0.2.9"
+    },
+    "devDependencies": {
+        "grunt": "~0.4.2",
+        "grunt-contrib-requirejs": "~0.4.1"
+    },
+    "author": "Antoine Jackson",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/smartblocks/smartblocks.git"
+    },
+    "license": "AGPL-3.0"
 }
