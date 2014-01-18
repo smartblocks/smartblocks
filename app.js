@@ -9,13 +9,14 @@ module.exports = function () {
     var fs = require('fs');
     var os = require('os');
     var orm = require('orm');
+    var async = require('async');
 
     var app = express();
 
     var config = require(path.join(process.cwd(), 'config'))();
 
 
-
+    var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
     app.set('port', config.port || process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
@@ -32,6 +33,30 @@ module.exports = function () {
 
                 }
             });
+            var model_pathes = [];
+            //models loading.
+            for (var k in blocks_folders) {
+                var models_folder = path.join(process.cwd(), 'blocks', blocks_folders[k], 'backend', 'models');
+                var model_names = fs.readdirSync(models_folder);
+                for (var i in model_names) {
+                    var model_name = model_names[i];
+                    model_pathes.push(path.join('blocks', blocks_folders[k], 'backend', 'models', model_name));
+                }
+            }
+            async.each(model_pathes, function (path, next) {
+                if (path.indexOf('.js') != -1) {
+                    db.load(path, function (err) {
+                        next();
+                    });
+                } else {
+                    next();
+                }
+            }, function () {
+                for (var k in db.models) {
+                    models[k] = db.models[k];
+                }
+            });
+
             next();
         }
     }));
@@ -57,7 +82,7 @@ module.exports = function () {
 
 
 // [begin] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
-    var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
+
 //backend blocks webservices
     for (var k in blocks_folders) {
         var block_folder = blocks_folders[k];
