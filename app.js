@@ -22,10 +22,9 @@ module.exports = function () {
     app.set('port', config.port || process.env.PORT || 3000);
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
-    console.log(config.database.connection_str);
+
     app.use(orm.express(config.database.connection_str, {
         define: function (db, models, next) {
-            console.log('registering users');
             models.User = db.define('User', {
                 email: String,
                 password: String,
