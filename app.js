@@ -1,5 +1,7 @@
 /**
- * Module dependencies.
+ * This module loads up everything for the web app to start.
+ * Initiates express, the database according to the config, models etc.
+ * Then initiates webservices for each block and kernel, after having read every available controller.
  */
 module.exports = function () {
 
