@@ -59,8 +59,8 @@ SmartBlocks allows you to create complex Single Paged Applications.
 
 It revolves around the concept of **blocks**. In SmartBlocks, a block is a feature module.
 
-Whenever you want to develop a feature for your website, and that you thing that it could be reused somewhere else,
-create a new block. That block can later be dropped in another project, which makes you gain a significant ammount of
+Whenever you want to develop a feature for your website, and that you think that it could be reused somewhere else,
+create a new block. That block can later be dropped in another project, which makes you gain a significant amount of
 time.
 
 A SmartBlocks project contains one block or more. There is always a central block, or main block that ties everything
