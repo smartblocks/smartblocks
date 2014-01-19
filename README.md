@@ -131,6 +131,8 @@ For example, if you launch your app with the 'staging' parameter, you'll get a m
 and the 'staging' object.
 
 The 'all' object contains the following information :
+
+
     all: {
         site: {
             title: "Name of the website (sets the <title> tag in the page)"
