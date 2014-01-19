@@ -14,8 +14,9 @@ module.exports = function () {
         .version(pkg.version)
         .option('start', 'Start application')
         .option('init [name]', 'Create a new SmartBlocks project in the folder [name]')
-        .option('generate_block', 'Create a new block structure in the folder blocks / [name]')
+        .option('generate_block', 'Create a new block structure in the folder blocks')
         .option('generate_type', 'Generates a type in the block of your choice, with associated backend/frontend models, controllers and so on.')
+        .option('generate_app', 'Generates a new app in the front end of the block of your choice, with an entry view, template and style')
         .parse(process.argv);
 
     if (program.start) {
@@ -23,22 +24,26 @@ module.exports = function () {
         app_starter();
     }
 
-    if (program.generate_block) {
+    else if (program.generate_block) {
         generation.generateBlock();
     }
 
-    if (program.init) {
+    else if (program.init) {
         if (program.init === true) {
             program.init = '.';
         }
         smartblocks.cli().createProjectStructure(program.init);
     }
 
-    if (program.generate_type) {
+    else if (program.generate_type) {
         generation.generateType();
     }
 
-    if (program.generate_app) {
-        generation.generateType();
+    else if (program.generate_app) {
+        generation.generateApp();
+    }
+    else {
+        console.log('Usage : smartblocks' + ' command'.yellow);
+        console.log('with command: ' + 'init'.green + '|' + 'start'.green + '|' + 'generate_block'.green + '|' + 'generate_type'.green + '|' + 'generate_app'.green);
     }
 };
