@@ -2,6 +2,7 @@ var app_starter = require('./app');
 var fs = require('fs');
 var path = require('path');
 var smartblocks = require('./lib/smartblocks');
+var generation = require('./lib/generation');
 
 var cwd = process.cwd();
 
@@ -14,6 +15,7 @@ module.exports = function () {
         .option('start', 'Start application')
         .option('init [name]', 'Create a new SmartBlocks project in the folder [name]')
         .option('create_block [name]', 'Create a new block structure in the folder blocks / [name]')
+        .option('generate_type', 'Generates a type in the block of your choice, with associated backend/frontend models, controllers and so on.')
         .parse(process.argv);
 
     if (program.start) {
@@ -30,5 +32,9 @@ module.exports = function () {
             program.init = '.';
         }
         smartblocks.cli().createProjectStructure(program.init);
+    }
+
+    if (program.generate_type) {
+        generation.generateType();
     }
 };
