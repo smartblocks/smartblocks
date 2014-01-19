@@ -17,9 +17,9 @@ for the front-end. To hold data, it is currently based on MongoDB.
 
 > Please make sure you installed MongoDB and that it is running before trying to start the web app.
 
-To install and try the current developer nightly of SmartBlocks, run the following command :
+To install and try the current version of SmartBlocks, run the following command :
 
-    npm install smartblocks
+    npm install -g smartblocks
 
 Then, to create a smartblocks project, run this command :
 
