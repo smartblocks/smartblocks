@@ -31,7 +31,10 @@ Now go in the created directory.
 
 Then you can start the web app to see if the install worked :
 
-    smartblocks start
+    smartblocks start [mode]
+
+The default mode is 'local', and makes your app run on the port 3000.
+The other modes are : 'staging' (4000) and 'production' (5000)
 
 You should see something like this in the console :
 
@@ -88,7 +91,72 @@ The blocks folder contains all the blocks.
 
 ##Configuration
 
+To configure a SmartBlocks, go to the **config** folder. There, you'll find the file **index.js**.
 
+This file currently allows you to :
+
+- configure the database connection
+- configure which app is launched for the root address (startup_app)
+- set the name of your website.
+
+It is structured in the following way :
+
+    var config = {
+        all: {
+            //app state agnostic configuration
+        },
+        local: {
+            //development configuration
+        },
+        staging: {
+            //staging configuration
+        },
+        production: {
+          //production configuration
+        }
+    };
+
+    module.exports = function (mode) {
+        var object = config[mode || process.argv[3] || 'local'] || config.local
+        for (var k in config.all) {
+            object[k] = config.all[k];
+        }
+        return object;
+    };
+
+It returns the a configuration object according to the app mode string given. The object will be a merge between
+the 'all' object and the object corresponding to the app mode.
+
+For example, if you launch your app with the 'staging' parameter, you'll get a merge between the 'all' object
+and the 'staging' object.
+
+The 'all' object contains the following information :
+    all: {
+        site: {
+            title: "Name of the website (sets the <title> tag in the page)"
+        },
+        frontend: {
+            startup_app: { //sets the app that's going to start at launch (when no #url is specified).
+                block: 'main',
+                app: 'home'
+            }
+        }
+    },
+
+The other objects contain information for the database connection. For example, if you're using MongoDB, this will
+make your project use the 'exampleDB' database, and collections will be created for every model you create.
+It also makes your app use the port 3000. You can change these settings for the other app modes.
+
+    local: {
+        mode: 'local',
+        port: 3000,
+        database: {
+            connection_str: 'mongodb://127.0.0.1:27017',
+            name: 'exampleDB'
+        }
+    },
+
+By default your app is launched in the 'local' mode.
 
 ##Blocks
 
@@ -246,16 +314,18 @@ Then you'd be able to loop through the posts_array and work with the data.
 ##Creating your own first block
 -----------------------------------------------------------------
 
+This part explains to you how to create a basic Todo list app with SmartBlocks.
+
 ##Automated creation
 To create a block, go to the project folder and enter the following command :
 
     $ smartblocks generate_block
 
-You'll be asked the name of the block. This will create the following folder structure in your project :
+You'll be asked the name of the block. Enter 'TaskManager'. This will create the following folder structure in your project :
 
     blocks/
         ...
-        blockName/
+        TaskManager/
             frontend/
                 apps/
                 collections/
@@ -269,6 +339,112 @@ You'll be asked the name of the block. This will create the following folder str
         ...
 
 
+##Working in the back end : creating the Task model and the Tasks controller
+
+###Task Model
+
+Create the **Task.js** file in the TaskManager/backend/models folder, and enter the following code in it :
+
+    module.exports = function (db, cb) {
+        db.define('Book', {
+            name: String
+        });
+        return cb();
+    };
+
+###Tasks controller
+
+Now, to create a webservice to edit those tasks, create the **Tasks.js** file in the TaskManager/backend/controllers
+folder, and edit it so it looks like this :
+
+    module.exports = {
+        /**
+         * Gets all the tasks stored and returns a json array
+         */
+        index: function (req, res) {
+            req.models.Task.find({}, function (err, tasks) {
+                if (err) {
+                    res.send(500, 'error');
+                } else {
+                    res.json(tasks);
+                }
+            });
+        },
+        /**
+         * Gets the task pointed by the id parameter in the URL, and returns it as Json
+         */
+        show: function (req, res) {
+            var id = req.params.id;
+            req.models.Task.get(id, function (err, task) {
+                if (err) {
+                    res.send(404, 'not found');
+                } else {
+                    res.json(task);
+                }
+            });
+        },
+        /**
+         * Creates a new task with the given name and returns it as json
+         */
+        create: function (req, res) {
+            var name = req.body.name;
+            if (name) {
+                req.models.Task.create([
+                    {
+                        name: name
+                    }
+                ], function (err, tasks) {
+                    res.json(tasks[0]);
+                });
+            } else {
+                res.send(400, 'missing parameters');
+            }
+        },
+        /**
+         * Updates the task with the given id with the parameters given (sent as json body by a Backbone model
+         * when the method save() is called in the front-end)
+         */
+        update: function (req, res) {
+            var id = req.params.id;
+            var name = req.body.name;
+            var content = req.body.content;
+            if (name && content) {
+                req.models.Task.get(id, function (err, task) {
+                    if (err) {
+                        res.send(404);
+                    } else {
+                        task.name = name;
+                        task.save(function (err) {
+                            if (err) {
+                                res.send(500);
+                            } else {
+                                res.json(task);
+                            }
+                        });
+                    }
+                });
+            }
+        },
+        /**
+         * Deletes the task that has the given id
+         */
+        destroy: function (req, res) {
+            var id = req.params.id;
+            req.models.Task.get(id, function (err, task) {
+                if (err) {
+                    res.send(404);
+                } else {
+                    task.remove(function (err) {
+                        if (err) {
+                            res.send(500);
+                        } else {
+                            res.send(200, 'success');
+                        }
+                    });
+                }
+            });
+        }
+    };
 
 ##Working in the front-end : linking data and creating an app.
 
@@ -487,6 +663,14 @@ Smartblocks is licensed under the AGPL v3.0 license.
 
 We're working on the official website where there will be more docs and stuff.
 We're thinking about making a features store ;).
+
+The website will contain useful information for a more complete use than the one presented in this Readme, including
+for example :
+
+- Application subrouting
+- Shortcuts detection
+- Live exchange with socket.io (which is included in the framework)
+- User / session management, and user restricted blocks / apps
 
 [1]:http://localhost:3000
 [2]:http://www.tldrlegal.com/l/AGPL3
