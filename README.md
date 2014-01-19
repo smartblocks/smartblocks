@@ -654,12 +654,70 @@ file /config/index.js, the field :
             }
         },
 
-#License
 
+#Command Line Interface for SmartBlocks
+--------------------------------------------------
+
+A few commands are available for the smartblocks tool. Here they are.
+
+##init
+
+Run it from the folder where you host all your projects :
+
+    $ smartblocks init MyWebsite
+
+This creates a folder called MyWebsite. In it, you'll find the standard directory structure for a smartblocks project,
+with a main block, containing a preconfigured homepage.
+
+##start
+
+    $ smartblocks start [local|staging|production]
+
+This launches the app, which is accessible on [http://localhost:3000][1] if launched in the staging mode.
+
+##generate_block
+
+    $ smartblocks generate_block
+
+This command asks the developer for a new block name and scaffolds the folder structure, in the blocks folder.
+It creates the following structure :
+
+    blocks/
+        backend/
+            models/
+            controllers/
+        frontend/
+            apps/
+            models/
+            collections/
+            index.js
+            index.less
+        descriptor.json
+
+##generate_type
+
+    $ smartblocks generate_type
+
+This command asks the developer a series of questions to create a new type. This will create :
+
+- a model in the backend, with the fields added by the developer,
+- an empty controller in the backend, letting the developer decide how the data is returned to the front-end,
+- a type entry in the descriptor.json, allowing the front-end to automatically load this data,
+- a Backbone model in the front-end
+- a Backbone collection in the front-end
+
+All that will be created in the block the developer chose (this is the first question).
+
+When adding a new type, this command allows the developer to only concentrate on the webservice, the other tasks
+usually being the same.
+
+#License
+--------------------------------------------------
 Smartblocks is licensed under the AGPL v3.0 license.
 [http://www.tldrlegal.com/l/AGPL3][2]
 
 #More information about Smartblocks
+--------------------------------------------------
 
 We're working on the official website where there will be more docs and stuff.
 We're thinking about making a features store ;).
