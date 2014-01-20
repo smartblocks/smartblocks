@@ -732,6 +732,26 @@ It does the following :
     - an entry in the descriptor.json file
     - an entry in the index.less file, pointing to the block's main style file
 
+##generate_controller
+
+    $ smartblocks generate_controller
+
+This generates a simple controller file in the block of the developer's choosing, with the given name
+
+##generate_model
+
+    $ smartblocks generate_model
+
+This generates a simple model file in the block of the developer's choosing, with the given name
+
+##generate_view
+
+    $ smartblocks generate_view
+
+This generates a view in the block and the app of the developer's choosing with the given name. An empty template
+and an empty style file (+ link from main.less in the app) are also added.
+
+
 #License
 --------------------------------------------------
 Smartblocks is licensed under the AGPL v3.0 license.
