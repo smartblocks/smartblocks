@@ -18,6 +18,7 @@ module.exports = function () {
         .option('generate_type', 'Generates a type in the block of your choice, with associated backend/frontend models, controllers and so on.')
         .option('generate_app', 'Generates a new app in the front end of the block of your choice, with an entry view, template and style')
         .option('generate_controller', 'Generates a new controller in the block of your choice')
+        .option('generate_model', 'Generates a new model in the block of your choice')
         .parse(process.argv);
 
     if (program.start) {
@@ -46,6 +47,10 @@ module.exports = function () {
 
     else if (program.generate_controller) {
         generation.generateController();
+    }
+
+    else if (program.generate_model) {
+        generation.generateModel();
     }
 
     else {
