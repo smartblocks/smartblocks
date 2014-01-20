@@ -302,7 +302,7 @@ The object's structure is the following :
                     .ExampleModel
                 .Collections : contains all the Backbone Collections of that block
                     .ExampleModels
-                .Data : contains Backbone collections of the data loaded in the clien
+                .Data : contains Backbone collections of the data loaded in the client
                     .examplemodels
                 .Main : contains all the methods in the block's index.js file
 
