@@ -25,15 +25,7 @@ module.exports = function () {
 
     app.use(orm.express(config.database.connection_str, {
         define: function (db, models, next) {
-            models.User = db.define('User', {
-                email: String,
-                password: String,
-                session_id: String
-            }, {
-                methods: {
 
-                }
-            });
             var model_pathes = [];
             //models loading.
             for (var k in blocks_folders) {
@@ -44,6 +36,9 @@ module.exports = function () {
                     model_pathes.push(path.join('blocks', blocks_folders[k], 'backend', 'models', model_name));
                 }
             }
+
+
+
             async.each(model_pathes, function (path, next) {
                 if (path.indexOf('.js') != -1) {
                     db.load(path, function (err) {

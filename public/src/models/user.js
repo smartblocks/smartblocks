@@ -4,7 +4,7 @@ define([
     'backbone'
 ], function ($, _, Backbone) {
     var User = Backbone.Model.extend({
-        urlRoot: "/Users",
+        urlRoot: "/main/Users",
         defaults: {
             username: "anonymous",
             rights: [],
