@@ -2,11 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'UserModel',
     "LoadingScreen",
-    "UsersCollection",
     "sb_basics"
-], function ($, _, Backbone, User, LoadingScreen, UsersCollection, sb_basics) {
+], function ($, _, Backbone, LoadingScreen, sb_basics) {
 
     var temp = {};
     var init_list = [];
@@ -284,41 +282,22 @@ define([
             };
 
             SmartBlocks.Shortcuts.init();
-
             SmartBlocks.router = new SmartBlocks.basics.Router();
-
-
             SmartBlocks.basics.init_solution();
-
             SmartBlocks.Data.blocks = new SmartBlocks.Collections.Blocks();
             SmartBlocks.Data.apps = new SmartBlocks.Collections.Applications();
-
-
             SmartBlocks.Methods.startMainLoading("Loading apps", 8);
 
-            User.getCurrent(function (current_user) {
-
-                SmartBlocks.basics.connected_users = new UsersCollection();
-
-                var timers = [];
-                SmartBlocks.current_user = current_user;
-                SmartBlocks.Data.apps.fetch({
-                    success: function () {
-                        SmartBlocks.Methods.continueMainLoading(1, "Loading blocks");
-//                        amplify.store("sb.data.apps", SmartBlocks.Data.apps.toArray());
-                        load_blocks();
-                    },
-                    error: function () {
-                        SmartBlocks.Methods.continueMainLoading(1, "Loading blocks");
-//                        SmartBlocks.Data.apps = new SmartBlocks.Collections.Applications(amplify.store("sb.data.apps"));
-                        load_blocks();
-                    }
-                });
-
-
+            SmartBlocks.Data.apps.fetch({
+                success: function () {
+                    SmartBlocks.Methods.continueMainLoading(1, "Loading blocks");
+                    load_blocks();
+                },
+                error: function () {
+                    SmartBlocks.Methods.continueMainLoading(1, "Loading blocks");
+                    load_blocks();
+                }
             });
-
-
         },
         States: {
             main_loading: false
@@ -415,32 +394,26 @@ define([
                     var collection_name = type.plural.charAt(0).toUpperCase() + type.plural.slice(1);
 
                     require([block.get('name') + '/models/' + type.name, block.get('name') + '/collections/' + collection_name], function (model, collection) {
-                        if (!block.get("restricted_to") || SmartBlocks.current_user.hasRight(block.get("restricted_to"))) {
-                            SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;
-                            SmartBlocks.Blocks[block.get("name")].Collections[collection_name] = collection;
-                            SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new collection();
-                            SmartBlocks.Blocks[block.get("name")].Data[type.plural].fetch({
-                                success: function () {
-                                    SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
+
+                        SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;
+                        SmartBlocks.Blocks[block.get("name")].Collections[collection_name] = collection;
+                        SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new collection();
+                        SmartBlocks.Blocks[block.get("name")].Data[type.plural].fetch({
+                            success: function () {
+                                SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
 //                                    amplify.store("block_data-" + block.get("token"), SmartBlocks.Blocks[block.get("name")].Data[type.plural].toArray());
-                                    if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
-                                        init_blocks();
-                                    }
-                                },
-                                error: function () {
-                                    SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
-//                                    SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new SmartBlocks.Blocks[block.get("name")].Collections[type.collection_name](amplify.store("block_data-" + block.get("token")));
-                                    if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
-                                        init_blocks();
-                                    }
+                                if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
+                                    init_blocks();
                                 }
-                            });
-                        } else {
-                            SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
-                            if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
-                                init_blocks();
+                            },
+                            error: function () {
+                                SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
+//                                    SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new SmartBlocks.Blocks[block.get("name")].Collections[type.collection_name](amplify.store("block_data-" + block.get("token")));
+                                if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
+                                    init_blocks();
+                                }
                             }
-                        }
+                        });
 
                     });
                 })(block);
