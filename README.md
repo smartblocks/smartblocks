@@ -91,7 +91,7 @@ The blocks folder contains all the blocks.
 
 ##Configuration
 
-To configure a SmartBlocks, go to the **config** folder. There, you'll find the file **index.js**.
+To configure a SmartBlocks project, go to the **config** folder. There, you'll find the file **index.js**.
 
 This file currently allows you to :
 
@@ -124,7 +124,7 @@ It is structured in the following way :
         return object;
     };
 
-It returns the a configuration object according to the app mode string given. The object will be a merge between
+It returns the configuration object according to the app mode string given. The object will be a merge between
 the 'all' object and the object corresponding to the app mode.
 
 For example, if you launch your app with the 'staging' parameter, you'll get a merge between the 'all' object
