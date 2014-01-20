@@ -1,0 +1,13 @@
+define([
+    'jquery',
+    'underscore',
+    'backbone',
+    '../models/{{ model_name }}'
+], function ($, _, Backbone, {{ model_name }}) {
+    var Collection = Backbone.Collection.extend({
+        model: {{ model_name }},
+        url: "/{{ block_name }}/{{ controller_name }}"
+    });
+
+    return Collection;
+});
