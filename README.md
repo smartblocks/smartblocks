@@ -713,6 +713,25 @@ All that will be created in the block the developer chose (this is the first que
 When adding a new type, this command allows the developer to only concentrate on the webservice, the other tasks
 usually being the same.
 
+##generate_app
+
+    $ smartblocks generate_app
+
+This command asks the developer a series of questions to create a new app. These request the following information :
+
+- in what block the app must be created,
+- the name of the app.
+
+It does the following :
+
+- creates a folder named after the app in the frontent/app directory, with
+    - a views folder, containing the main view of the app,
+    - a style folder, containing the main style file for the app,
+    - a templates folder, containing the main template file for the app
+    - a launch method in the index.js
+    - an entry in the descriptor.json file
+    - an entry in the index.less file, pointing to the block's main style file
+
 #License
 --------------------------------------------------
 Smartblocks is licensed under the AGPL v3.0 license.
