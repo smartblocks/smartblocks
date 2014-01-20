@@ -59,8 +59,8 @@ SmartBlocks allows you to create complex Single Paged Applications.
 
 It revolves around the concept of **blocks**. In SmartBlocks, a block is a feature module.
 
-Whenever you want to develop a feature for your website, and that you thing that it could be reused somewhere else,
-create a new block. That block can later be dropped in another project, which makes you gain a significant ammount of
+Whenever you want to develop a feature for your website, and that you think that it could be reused somewhere else,
+create a new block. That block can later be dropped in another project, which makes you gain a significant amount of
 time.
 
 A SmartBlocks project contains one block or more. There is always a central block, or main block that ties everything
@@ -131,6 +131,8 @@ For example, if you launch your app with the 'staging' parameter, you'll get a m
 and the 'staging' object.
 
 The 'all' object contains the following information :
+
+
     all: {
         site: {
             title: "Name of the website (sets the <title> tag in the page)"
@@ -710,6 +712,25 @@ All that will be created in the block the developer chose (this is the first que
 
 When adding a new type, this command allows the developer to only concentrate on the webservice, the other tasks
 usually being the same.
+
+##generate_app
+
+    $ smartblocks generate_app
+
+This command asks the developer a series of questions to create a new app. These request the following information :
+
+- in what block the app must be created,
+- the name of the app.
+
+It does the following :
+
+- creates a folder named after the app in the frontent/app directory, with
+    - a views folder, containing the main view of the app,
+    - a style folder, containing the main style file for the app,
+    - a templates folder, containing the main template file for the app
+    - a launch method in the index.js
+    - an entry in the descriptor.json file
+    - an entry in the index.less file, pointing to the block's main style file
 
 #License
 --------------------------------------------------
