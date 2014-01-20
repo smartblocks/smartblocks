@@ -1,0 +1,12 @@
+define([
+    'underscore',
+    'backbone'
+], function (_, Backbone) {
+    var Model = Backbone.Model.extend({
+        default: {
+
+        },
+        urlRoot: "/{{ block_name }}/{{ controller_name }}"
+    });
+    return Model;
+});
