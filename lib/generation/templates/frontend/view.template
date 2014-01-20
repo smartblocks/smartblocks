@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../templates/main.html'
+    'text!../templates/{{ name }}.html'
 ], function ($, _, Backbone, tpl) {
     var View = Backbone.View.extend({
         tagName: "div",

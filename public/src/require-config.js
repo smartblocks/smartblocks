@@ -5,8 +5,6 @@ requirejs.config({
         underscore: "libs/underscore",
         backbone: "libs/backbone",
         text: "libs/text",
-        UserModel: "models/user",
-        UsersCollection: "collections/users",
         Class: 'tools/Class',
         LoadingTemplate: "templates/loading.html",
         LoadingScreen: "views/LoadingScreen",

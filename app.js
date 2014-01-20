@@ -23,42 +23,39 @@ module.exports = function () {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
 
-    app.use(orm.express(config.database.connection_str, {
+    app.use(orm.express(config.database.connection_str + '/' + config.database.name, {
         define: function (db, models, next) {
-            models.User = db.define('User', {
-                email: String,
-                password: String,
-                session_id: String
-            }, {
-                methods: {
 
-                }
-            });
             var model_pathes = [];
+//            model_pathes.push(path.join(__dirname, 'lib', 'models', 'User.js'));
             //models loading.
             for (var k in blocks_folders) {
                 var models_folder = path.join(process.cwd(), 'blocks', blocks_folders[k], 'backend', 'models');
                 var model_names = fs.readdirSync(models_folder);
                 for (var i in model_names) {
                     var model_name = model_names[i];
-                    model_pathes.push(path.join('blocks', blocks_folders[k], 'backend', 'models', model_name));
+                    model_pathes.push(path.join(process.cwd(), 'blocks', blocks_folders[k], 'backend', 'models', model_name));
                 }
             }
+
+
             async.each(model_pathes, function (path, next) {
-                if (path.indexOf('.js') != -1) {
-                    db.load(path, function (err) {
+                var module = require(path);
+                if (typeof module === 'function')
+                    module(db, function () {
                         next();
                     });
-                } else {
+                else
                     next();
-                }
+
             }, function () {
                 for (var k in db.models) {
                     models[k] = db.models[k];
                 }
+                next();
             });
 
-            next();
+
         }
     }));
 
