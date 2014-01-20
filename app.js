@@ -23,7 +23,7 @@ module.exports = function () {
     app.set('views', path.join(__dirname, 'views'));
     app.set('view engine', 'hjs');
 
-    app.use(orm.express(config.database.connection_str, {
+    app.use(orm.express(config.database.connection_str + '/' + config.database.name, {
         define: function (db, models, next) {
 
             var model_pathes = [];

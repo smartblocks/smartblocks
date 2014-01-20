@@ -131,28 +131,28 @@ define([
             $(document).attr('title', title);
         },
         chatNotif: function (user_id) {
-            $.ajax({
-                url: "/Discussions",
-                data: {
-                    user_id: user_id
-                },
-                success: function (data, status) {
-                    var number = 0;
-                    for (var d in data) {
-                        if (data[d].notify) {
-                            number++;
-                        }
-                    }
-
-                    if (number <= 0) {
-                        $("#chat_notif").html(0);
-                        $("#chat_notif").hide();
-                    } else {
-                        $("#chat_notif").html(number);
-                        $("#chat_notif").show();
-                    }
-                }
-            });
+//            $.ajax({
+//                url: "/Discussions",
+//                data: {
+//                    user_id: user_id
+//                },
+//                success: function (data, status) {
+//                    var number = 0;
+//                    for (var d in data) {
+//                        if (data[d].notify) {
+//                            number++;
+//                        }
+//                    }
+//
+//                    if (number <= 0) {
+//                        $("#chat_notif").html(0);
+//                        $("#chat_notif").hide();
+//                    } else {
+//                        $("#chat_notif").html(number);
+//                        $("#chat_notif").show();
+//                    }
+//                }
+//            });
 
         },
         sendWs: function (app, data, to) {

@@ -11,6 +11,7 @@ define([
 
 
     function init_blocks() {
+
         var blocks = SmartBlocks.Data.blocks;
         var blocks_count = blocks.length;
         var processed_blocks = 0;
@@ -77,6 +78,7 @@ define([
     }
 
     function after_config() {
+
         var blocks = SmartBlocks.Data.blocks;
         SmartBlocks.Methods.count = 0;
         for (var k in blocks.models) {
@@ -135,14 +137,6 @@ define([
             }
         });
 
-        SmartBlocks.basics.connected_users.on("add", function () {
-            SmartBlocks.basics.connected_users.trigger("change");
-        });
-
-        SmartBlocks.basics.connected_users.on("remove", function () {
-            SmartBlocks.basics.connected_users.trigger("change");
-        });
-
         setInterval(function () {
             //SmartBlocks.heartBeat(current_user);
         }, 5000);
@@ -168,9 +162,10 @@ define([
             SmartBlocks.events = _.extend({}, Backbone.Events);
 
             SmartBlocks.started = false;
+
+
             SmartBlocks.events.on("start_solution", function () {
                 //Done loading everything, launching main app
-
                 if (!SmartBlocks.started) {
                     SmartBlocks.Methods.start();
                     if (temp.callback) {
