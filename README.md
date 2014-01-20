@@ -274,8 +274,8 @@ When a user calls the root url :
 
     http://yoursite/
 
-An html page is loaded. This page contains references to the smartblocks front-end framework. The latter
-will initialize everything, by :
+An html page is loaded. This page contains references to the smartblocks front-end framework. 
+The latter will initialize everything, by :
 
 - loading apps, and blocks, and their data
 - creating a SmartBlocks object
