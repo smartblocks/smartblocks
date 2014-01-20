@@ -17,6 +17,7 @@ module.exports = function () {
         .option('generate_block', 'Create a new block structure in the folder blocks')
         .option('generate_type', 'Generates a type in the block of your choice, with associated backend/frontend models, controllers and so on.')
         .option('generate_app', 'Generates a new app in the front end of the block of your choice, with an entry view, template and style')
+        .option('generate_controller', 'Generates a new controller in the block of your choice')
         .parse(process.argv);
 
     if (program.start) {
@@ -42,6 +43,11 @@ module.exports = function () {
     else if (program.generate_app) {
         generation.generateApp();
     }
+
+    else if (program.generate_controller) {
+        generation.generateController();
+    }
+
     else {
         console.log('Usage : smartblocks' + ' command'.yellow);
         console.log('with command: ' + 'init'.green + '|' + 'start'.green + '|' + 'generate_block'.green + '|' + 'generate_type'.green + '|' + 'generate_app'.green);
