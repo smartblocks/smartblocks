@@ -127,6 +127,9 @@ module.exports = function () {
         }
     }
 
+//installed blocks
+
+
 //lib kernel webservices
     var controllers = fs.readdirSync(path.join(__dirname, 'lib', 'controllers'));
     for (var c in controllers) {
@@ -167,46 +170,130 @@ module.exports = function () {
     }
 // [end] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
 
-    app.all('/', function (req, res) {
-        res.render('index', {
-            site: config.site
-        });
-    });
 
-    var server = http.createServer(app);
-    server.listen(config.port, function () {
-        console.log(' __   __   __\n' +
-            '|__| |__| |__|\n' +
-            ' __   __   __\n' +
-            '|__| |__| |__|\n' +
-            ' __   __   __\n' +
-            '|__| |__| |__|\n\n' +
-            ' SMART BLOCKS\nRunning on ' + app.get('port'));
-    });
+    require('child_process').exec('npm ls --json', function (err, stdout, stderr) {
 
-    var io = require('socket.io').listen(server, { log: false });
 
-    io.sockets.on('connection', function (socket) {
-        socket.on('set id', function (session_id) {
-            socket.set('id', session_id);
-        });
+        var modules = JSON.parse(stdout).dependencies;
+        var installed_blocks_folders = [];
+        console.log(modules);
+        for (var k in modules) {
 
-        socket.on('send_message', function (session_id, message) {
-            var clients = io.sockets.clients();
-            for (var k in clients) {
-                var client = clients[k];
-                client.get('id', function (err, id) {
-                    if (id == session_id) {
-                        client.emit("msg", message);
+            var mname = k;
+            if (mname.indexOf('smartblocks-') === 0) {
+                var block = require(path.join(process.cwd(), 'node_modules', k));
+                if (block.smartblocks_block && block.location) {
+                    var name = mname.split('-');
+                    name.shift();
+                    var display_name = '';
+                    for (var i in name) {
+                        display_name += name[i][0].toUpperCase() + name[i].substr(1);
+
+                        installed_blocks_folders.push({
+                            name: display_name,
+                            location: block.location,
+                            frontend_path: path.join(block.location, 'frontend'),
+                            backend_path: path.join(block.location, 'backend')
+                        });
                     }
-                });
+                }
             }
+            (function (blocks) {
+                for (var k in blocks) {
+                    var block = blocks[k];
+                    var frontend_path = block.frontend_path;
+                    var backend_path = block.backend_path;
+                    var name = block.name;
+                    app.use('/' + block_folder, express.static(frontend_path));
+                    var controllers = fs.readdirSync(path.join(backend_path, 'controllers'));
+
+                    for (var c in controllers) {
+                        var controller_name = controllers[c].replace('.js', '');
+                        var controller = require(path.join(block.location, 'backend', 'controllers', controller_name));
+                        (function (controller_name, controller) {
+                            app.get('/' + name + '/' + controller_name, function (req, res) {
+                                if (controller.index) {
+                                    controller.index(req, res);
+                                }
+                            });
+                            app.all('/' + name + '/' + controller_name + '/action/:action', function (req, res) {
+                                if (controller[req.params.action]) {
+                                    controller[req.params.action](req, res);
+                                }
+                            });
+                            app.get('/' + name + '/' + controller_name + '/:id', function (req, res) {
+                                if (controller.show) {
+                                    controller.show(req, res);
+                                }
+                            });
+                            app.post('/' + name + '/' + controller_name, function (req, res) {
+                                if (controller.create) {
+                                    controller.create(req, res);
+                                }
+                            });
+                            app.put('/' + name + '/' + controller_name + '/:id', function (req, res) {
+                                if (controller.update) {
+                                    controller.update(req, res);
+                                }
+                            });
+                            app.delete('/' + name + '/' + controller_name + '/:id', function (req, res) {
+                                if (controller.destroy) {
+                                    controller.destroy(req, res);
+                                }
+                            });
+                        })(controller_name, controller);
+                    }
+                }
+            })(installed_blocks_folders);
+
+
+        }
+
+        start();
+    });
+
+    function start() {
+        app.all('/', function (req, res) {
+            res.render('index', {
+                site: config.site
+            });
         });
 
-        socket.on('broadcast_message', function (message) {
-            io.sockets.emit('msg', message);
+        var server = http.createServer(app);
+        server.listen(config.port, function () {
+            console.log(' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n' +
+                ' __   __   __\n' +
+                '|__| |__| |__|\n\n' +
+                ' SMART BLOCKS\nRunning on ' + app.get('port'));
         });
-    });
+
+        var io = require('socket.io').listen(server, { log: false });
+
+        io.sockets.on('connection', function (socket) {
+            socket.on('set id', function (session_id) {
+                socket.set('id', session_id);
+            });
+
+            socket.on('send_message', function (session_id, message) {
+                var clients = io.sockets.clients();
+                for (var k in clients) {
+                    var client = clients[k];
+                    client.get('id', function (err, id) {
+                        if (id == session_id) {
+                            client.emit("msg", message);
+                        }
+                    });
+                }
+            });
+
+            socket.on('broadcast_message', function (message) {
+                io.sockets.emit('msg', message);
+            });
+        });
+    }
 
 
 };
