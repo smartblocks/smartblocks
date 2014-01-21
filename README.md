@@ -91,7 +91,7 @@ The blocks folder contains all the blocks.
 
 ##Configuration
 
-To configure a SmartBlocks, go to the **config** folder. There, you'll find the file **index.js**.
+To configure a SmartBlocks project, go to the **config** folder. There, you'll find the file **index.js**.
 
 This file currently allows you to :
 
@@ -124,7 +124,7 @@ It is structured in the following way :
         return object;
     };
 
-It returns the a configuration object according to the app mode string given. The object will be a merge between
+It returns the configuration object according to the app mode string given. The object will be a merge between
 the 'all' object and the object corresponding to the app mode.
 
 For example, if you launch your app with the 'staging' parameter, you'll get a merge between the 'all' object
@@ -274,8 +274,8 @@ When a user calls the root url :
 
     http://yoursite/
 
-An html page is loaded. This page contains references to the smartblocks front-end framework. The latter
-will initialize everything, by :
+An html page is loaded. This page contains references to the smartblocks front-end framework. 
+The latter will initialize everything, by :
 
 - loading apps, and blocks, and their data
 - creating a SmartBlocks object
@@ -302,7 +302,7 @@ The object's structure is the following :
                     .ExampleModel
                 .Collections : contains all the Backbone Collections of that block
                     .ExampleModels
-                .Data : contains Backbone collections of the data loaded in the clien
+                .Data : contains Backbone collections of the data loaded in the client
                     .examplemodels
                 .Main : contains all the methods in the block's index.js file
 
