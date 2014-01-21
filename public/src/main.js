@@ -1,14 +1,12 @@
 requirejs([
     "underscore",
     "backbone",
-    "UserModel",
-    "UsersCollection",
     "LoadingScreen",
     "bootstrap",
     'less'
-], function (_, Backbone, User, UsersCollection, LoadingScreen, bootstrap) {
+], function (_, Backbone, LoadingScreen, bootstrap) {
 
-        bootstrap.init(function () {
+    bootstrap.init(function () {
 
-        });
+    });
 });
