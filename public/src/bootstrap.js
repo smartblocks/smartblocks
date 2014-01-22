@@ -13,7 +13,7 @@ define([
     function init_blocks() {
 
         var blocks = SmartBlocks.Data.blocks;
-        var blocks_count = blocks.length;
+        var blocks_count = blocks.models.length;
         var processed_blocks = 0;
         for (var k in blocks.models) {
             var block = blocks.models[k];
@@ -165,6 +165,7 @@ define([
 
 
             SmartBlocks.events.on("start_solution", function () {
+
                 //Done loading everything, launching main app
                 if (!SmartBlocks.started) {
                     SmartBlocks.Methods.start();
@@ -342,7 +343,9 @@ define([
                         if (app) {
                             app = SmartBlocks.Data.apps.get(app.get('name'));
                             SmartBlocks.entry_app = app;
+
                             SmartBlocks.Methods.setApp(SmartBlocks.entry_app);
+
                         }
                     }
                 } else {
