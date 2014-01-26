@@ -157,6 +157,9 @@ module.exports = function () {
         app.use(express.methodOverride());
         app.use(express.cookieParser('your secret here'));
         app.use(express.session());
+        app.use(require('./lib/middleware/spa_seo')({
+            delay: 2000
+        }));
 
 
         app.use(app.router);

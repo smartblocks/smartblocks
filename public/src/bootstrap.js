@@ -179,11 +179,14 @@ define([
             SmartBlocks.basics.Router = Backbone.Router.extend({
                 routes: {
                     "": "entry",
+                    "!": "entry",
+                    "!:appname": "launch_app",
                     ":appname": "launch_app",
+                    "!:appname/:params": "launch_app",
                     ":appname/:params": "launch_app"
                 },
                 initialize: function () {
-                    this.route(/^([a-zA-Z]*?)\/(.*?)$/, "launch_app", this.launch_app);
+                    this.route(/^!([a-zA-Z]*?)\/(.*?)$/, "launch_app", this.launch_app);
                     this.routesHit = 0;
                     Backbone.history.on('route', function () {
                         this.routesHit++;
