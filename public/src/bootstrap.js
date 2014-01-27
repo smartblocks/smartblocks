@@ -211,7 +211,8 @@ define([
                         app = SmartBlocks.Data.apps.get(app.get('name'));
                         SmartBlocks.Methods.setApp(app);
                     } else {
-                        SmartBlocks.Methods.entry();
+                        if (!app)
+                            SmartBlocks.Methods.entry();
                     }
                 },
                 back: function () {
