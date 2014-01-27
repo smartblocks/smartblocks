@@ -183,7 +183,7 @@ define([
                     ":appname/:params": "launch_app"
                 },
                 initialize: function () {
-                    this.route(/^([a-zA-Z]*?)\/(.*?)$/, "launch_app", this.launch_app);
+                    this.route(/^!([a-zA-Z]*?)\/(.*?)$/, "launch_app", this.launch_app);
                     this.routesHit = 0;
                     Backbone.history.on('route', function () {
                         this.routesHit++;
@@ -208,7 +208,8 @@ define([
                         app = SmartBlocks.Data.apps.get(app.get('name'));
                         SmartBlocks.Methods.setApp(app);
                     } else {
-                        SmartBlocks.Methods.entry();
+                        if (!app)
+                            SmartBlocks.Methods.entry();
                     }
                 },
                 back: function () {
