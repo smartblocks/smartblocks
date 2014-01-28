@@ -752,6 +752,23 @@ This generates a view in the block and the app of the developer's choosing with 
 and an empty style file (+ link from main.less in the app) are also added.
 
 
+#SEO with SmartBlocks
+
+As of v0.1.1, SmartBlocks supports Google's AJAX crawling system. When Google encounters links in your website
+containing '#!' for the local hash routing (used by Backbone, allowing a routing in single page apps), it replaces
+it by "?_escaped_fragment_=", thus sending any local hash parameters as a GET parameter to your server.
+
+SmartBlocks detects that "?_escaped_fragment_=" part, uses [PhantomJs][9] to prerender the asked application, waits
+for 2 seconds so that everything is loaded and rendered in the front-end, then sends the resulting HTML to the client.
+
+That way, a robot such as Google's will receive your website content right away, without you needing to worry about
+your single page app's SEO.
+
+However make sure you've got **PhantomJs installed and registered in your PATH variable**.
+
+For more information about how Google handles this, please refer to their documentation: [Making AJAX Applications
+Crawlable][8].
+
 #License
 --------------------------------------------------
 Smartblocks is licensed under the AGPL v3.0 license.
@@ -778,3 +795,5 @@ for example :
 [5]:http://requirejs.org/
 [6]:http://localhost:3000#todolist
 [7]:https://github.com/dresende/node-orm2
+[8]:https://developers.google.com/webmasters/ajax-crawling/?hl=iw
+[9]:http://phantomjs.org/
