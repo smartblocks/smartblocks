@@ -179,7 +179,10 @@ define([
             SmartBlocks.basics.Router = Backbone.Router.extend({
                 routes: {
                     "": "entry",
+                    "!": "entry",
+                    "!:appname": "launch_app",
                     ":appname": "launch_app",
+                    "!:appname/:params": "launch_app",
                     ":appname/:params": "launch_app"
                 },
                 initialize: function () {
