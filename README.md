@@ -204,7 +204,9 @@ You can add parts at will. To create a part, you need to add an object to the pa
     'urlPrefix'; {
         blocks: 'all' //or ['main', 'myblock', 'backoffice'...],
         access: ['list', 'of', 'rights' ],
-        layout: 'layout_name', //the layout must exist as a .hjs file in the /layouts folder - you can also add a .less file in /layouts/style with the same name, which will be included when loading this part
+        layout: 'layout_name', //the layout must exist as a .hjs file in the /layouts folder
+                               //you can also add a .less file in /layouts/style with the same name,
+                               //which will be included when loading this part
         entry: { //specify which app of which block is launched when the page loads
             block: 'myBlock',
             app: 'myApp',
