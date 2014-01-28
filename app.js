@@ -68,8 +68,15 @@ module.exports = function () {
 
     var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
     app.set('port', config.port || process.env.PORT || 3000);
-//    app.set('views', path.join(__dirname, 'views'));
-    app.set('views', path.join(process.cwd(), 'blocks', 'main', 'backend', 'layout'));
+
+
+
+    if (fs.existsSync(path.join(process.cwd(), 'layouts'))) {
+        app.set('views', path.join(process.cwd(), 'layouts'));
+    } else {
+        app.set('views', path.join(__dirname, 'views'));
+    }
+
     app.set('view engine', 'hjs');
     require('child_process').exec('npm ls --json', function (err, stdout, stderr) {
 
@@ -79,7 +86,6 @@ module.exports = function () {
          */
         var modules = JSON.parse(stdout).dependencies;
         var installed_blocks_folders = [];
-        console.log(modules);
         for (var k in modules) {
             var mname = k;
             if (mname.indexOf('smartblocks-') === 0) {
@@ -129,7 +135,6 @@ module.exports = function () {
                         model_pathes.push(path.join(models_folder, model_name));
                     }
                 }
-
 
 
                 async.each(model_pathes, function (path, next) {
