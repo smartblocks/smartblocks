@@ -7,35 +7,31 @@
 </div>
 <div class="information">
     <p>
-        So what have we here ?
+        To learn more about SmartBlocks, please read our readme on Github :
+        <a href="https://github.com/smartblocks/smartblocks">here.</a>
+    </p>
+    <h4>What can I do now ?</h4>
+
+    <p>
+        You can modify the home application (which is currently showing here), by editing the code
+        in /blocks/main/frontend/apps/home/.
     </p>
 
     <p>
-        This is the default "home" application created by the command :
-    <pre><span class="prompt">.../yourproject/$</span> smartblocks init [project-name]</pre>
+        You can generate blocks, which are basically modules to keep your different features independent.
 
-    </p>
-    <p>
-        It is hosted in the default block "main". This block's aim is to unify the features and apps of all your other
-        blocks.
+    <pre>$ smartblocks generate_block</pre>
     </p>
 
     <p>
-        In this block, you'll put stuff like global stylesheets, the homepage, the about us page and so on. All the
-        stuff
-        that is really specific to the website being developped.
+        You can generate types, which creates models, controllers and everything to persist data :
+
+    <pre>$ smartblocks generate_type</pre>
     </p>
-    <h4>All right. Why create other blocks then ?</h4>
 
     <p>
-        In other blocks, you'll put features and apps that can be reused for future projects. For example, if you need
-        a "Contact Us" page, with a form that saves messages in the database, this feature can be reused in other
-        websites,
-        and even shared with the community.<br/>
-        To create such a block, say you want to call it "contact", you'll have to run the following command :
-        <pre><span class="prompt">.../yourproject/$</span> smartblocks create_block contact</pre>
-    </p>
-    <p>
-        This will create the basis structure for the block.
+        You can generate apps, which creates views, templates and stylesheets to create front-end apps.
+
+    <pre>$ smartblocks generate_type</pre>
     </p>
 </div>
