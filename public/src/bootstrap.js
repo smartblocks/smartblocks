@@ -66,7 +66,7 @@ define([
     function load_config() {
         SmartBlocks.Methods.continueMainLoading(1, "Loading config");
         $.ajax({
-            url: "/Configs",
+            url: "configuration",
             success: function (data, status) {
                 SmartBlocks.Config = data;
                 after_config();
@@ -333,21 +333,21 @@ define([
             entry: function () {
                 if (!SmartBlocks.entry_app) {
                     var block = SmartBlocks.Data.blocks.where({
-                        name: SmartBlocks.Config.startup_app.block
+                        name: SmartBlocks.Config.entry.block
                     })[0];
                     if (block) {
 
-                        SmartBlocks.Url.params = SmartBlocks.Config.startup_app.url_params || [];
+                        SmartBlocks.Url.params = SmartBlocks.Config.entry.url_params || [];
                         var apps = new SmartBlocks.Collections.Applications(block.get('apps'));
                         var app = apps.where({
-                            name: SmartBlocks.Config.startup_app.app
+                            name: SmartBlocks.Config.entry.app
                         })[0];
 
 
+                        console.log(SmartBlocks.Config.entry.app);
                         if (app) {
                             app = SmartBlocks.Data.apps.get(app.get('name'));
                             SmartBlocks.entry_app = app;
-
                             SmartBlocks.Methods.setApp(SmartBlocks.entry_app);
 
                         }
@@ -395,22 +395,22 @@ define([
                 (function (block) {
                     var collection_name = type.plural.charAt(0).toUpperCase() + type.plural.slice(1);
 
-                    require([block.get('name') + '/models/' + type.name, block.get('name') + '/collections/' + collection_name], function (model, collection) {
-
+                    require([
+                        block.get('name') + '/models/' + type.name,
+                        block.get('name') + '/collections/' + collection_name
+                    ], function (model, collection) {
                         SmartBlocks.Blocks[block.get("name")].Models[type.name] = model;
                         SmartBlocks.Blocks[block.get("name")].Collections[collection_name] = collection;
                         SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new collection();
                         SmartBlocks.Blocks[block.get("name")].Data[type.plural].fetch({
                             success: function () {
                                 SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
-//                                    amplify.store("block_data-" + block.get("token"), SmartBlocks.Blocks[block.get("name")].Data[type.plural].toArray());
                                 if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
                                     init_blocks();
                                 }
                             },
                             error: function () {
                                 SmartBlocks.Methods.continueMainLoading((1 / SmartBlocks.Methods.count) * 3, "Loading data");
-//                                    SmartBlocks.Blocks[block.get("name")].Data[type.plural] = new SmartBlocks.Blocks[block.get("name")].Collections[type.collection_name](amplify.store("block_data-" + block.get("token")));
                                 if (++SmartBlocks.Methods.processed >= SmartBlocks.Methods.count) {
                                     init_blocks();
                                 }

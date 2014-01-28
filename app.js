@@ -11,6 +11,7 @@ var fs = require('fs');
 var os = require('os');
 var orm = require('orm');
 var async = require('async');
+var sb_methods = require('./lib/smartblocks');
 
 
 function register_webservices(block, app) {
@@ -68,7 +69,6 @@ module.exports = function () {
 
     var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
     app.set('port', config.port || process.env.PORT || 3000);
-
 
 
     if (fs.existsSync(path.join(process.cwd(), 'layouts'))) {
@@ -172,6 +172,11 @@ module.exports = function () {
         app.use(require('less-middleware')({ src: path.join(__dirname, 'public/build') }));
         app.use(express.static(path.join(__dirname, 'public/build')));
 
+        //registering static directory for layout related LESS files
+        if (fs.existsSync(path.join(process.cwd(), 'layouts', 'style'))) {
+            app.use('/_layout_style', express.static(path.join(process.cwd(), 'layouts', 'style')));
+        }
+
 
         if ('development' == app.get('env')) {
             app.use(express.errorHandler());
@@ -180,7 +185,54 @@ module.exports = function () {
 
 // [begin] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
 
-//backend blocks webservices
+
+//installed blocks
+
+
+//lib kernel webservices
+        var controllers = fs.readdirSync(path.join(__dirname, 'lib', 'controllers'));
+        for (var c in controllers) {
+            var controller_name = controllers[c].replace('.js', '');
+            var controller = require('./lib/controllers' + '/' + controller_name);
+            (function (controller_name, controller) {
+
+                app.get('/' + controller_name, function (req, res) {
+                    if (controller.index) {
+                        controller.index(req, res);
+                    }
+                });
+
+                app.all('/' + controller_name + '/action/:action', function (req, res) {
+                    if (controller[req.params.action]) {
+                        controller[req.params.action](req, res);
+                    }
+                });
+                app.get('/' + controller_name + '/:id', function (req, res) {
+                    if (controller.show) {
+                        controller.show(req, res);
+                    }
+                });
+                app.post('/' + controller_name, function (req, res) {
+                    if (controller.create) {
+                        controller.create(req, res);
+                    }
+                });
+                app.put('/' + controller_name + '/:id', function (req, res) {
+                    if (controller.update) {
+                        controller.update(req, res);
+                    }
+                });
+                app.delete('/' + controller_name + '/:id', function (req, res) {
+                    if (controller.destroy) {
+                        controller.destroy(req, res);
+                    }
+                });
+            })(controller_name, controller);
+        }
+// [end] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
+
+
+        //backend blocks webservices
         for (var k in blocks_folders) {
             var block_folder = blocks_folders[k];
             var frontend_path = path.join(process.cwd(), 'blocks', block_folder, 'frontend');
@@ -226,50 +278,6 @@ module.exports = function () {
             }
         }
 
-//installed blocks
-
-
-//lib kernel webservices
-        var controllers = fs.readdirSync(path.join(__dirname, 'lib', 'controllers'));
-        for (var c in controllers) {
-            var controller_name = controllers[c].replace('.js', '');
-            var controller = require('./lib/controllers' + '/' + controller_name);
-            (function (controller_name, controller) {
-                app.get('/' + controller_name, function (req, res) {
-                    if (controller.index) {
-                        controller.index(req, res);
-                    }
-                });
-                app.all('/' + controller_name + '/action/:action', function (req, res) {
-                    if (controller[req.params.action]) {
-                        controller[req.params.action](req, res);
-                    }
-                });
-                app.get('/' + controller_name + '/:id', function (req, res) {
-                    if (controller.show) {
-                        controller.show(req, res);
-                    }
-                });
-                app.post('/' + controller_name, function (req, res) {
-                    if (controller.create) {
-                        controller.create(req, res);
-                    }
-                });
-                app.put('/' + controller_name + '/:id', function (req, res) {
-                    if (controller.update) {
-                        controller.update(req, res);
-                    }
-                });
-                app.delete('/' + controller_name + '/:id', function (req, res) {
-                    if (controller.destroy) {
-                        controller.destroy(req, res);
-                    }
-                });
-            })(controller_name, controller);
-        }
-// [end] Implementing RESTful Web Services with controllers in lib and backend folder.  ****/
-
-
         (function (blocks) {
             for (var k in blocks) {
                 var block = blocks[k];
@@ -280,11 +288,82 @@ module.exports = function () {
     });
 
     function start() {
-        app.all('/', function (req, res) {
-            res.render('index', {
-                site: config.site
-            });
-        });
+
+
+        for (var k in config.parts) {
+            var address = "/" + k;
+            var part = config.parts[k];
+            (function (address, part) {
+                app.all(address + ( address !== '/' ? '/' : ''), function (req, res) {
+                    if (part.layout) {
+                        res.render(part.layout, {
+                            site: config.site
+                        });
+                    } else {
+                        res.render('index', {
+                            site: config.site
+                        });
+                    }
+                });
+
+
+                app.all(address + ( address !== '/' ? '/' : '') + 'configuration', function (req, res) {
+                    res.json({
+                        entry: part.entry
+                    });
+                });
+                app.all(address + ( address !== '/' ? '/' : '') + 'blocks', function (req, res) {
+                    sb_methods.getBlocksModels(function (blocks) {
+                        var response = [];
+
+                        for (var k in blocks) {
+
+                            var block = blocks[k];
+                            if (part.blocks === 'all' || part.blocks.indexOf(block.name) !== -1) {
+                                if (block.restricted_to) {
+                                    var add = false;
+                                    for (var j in block.restricted_to) {
+                                        if (req.session.rights && req.session.rights.indexOf(block.restricted_to[j]) !== -1) {
+                                            add = true;
+                                        }
+                                    }
+                                    if (add) {
+                                        response.push(block);
+                                    }
+                                } else {
+                                    response.push(block);
+                                }
+                            }
+                        }
+
+                        res.json(response);
+                    });
+                });
+
+                app.all(address + ( address !== '/' ? '/' : '') + '_style', function (req, res) {
+                    var blocks = sb_methods.getBlocks();
+                    var response = '@import "/main.less";';
+
+                    fs.exists(path.join(process.cwd(), 'layouts', 'style', part.layout + '.less'), function (exists) {
+                        if (exists) {
+                            response += '\n@import "/_layout_style/' + part.layout + '";';
+                        }
+                        for (var k in blocks) {
+                            var block = blocks[k];
+                            if (part.blocks === 'all' || part.blocks.indexOf(block) !== -1) {
+                                response += '\n@import "/' + block + '/index.less";';
+                            }
+                        }
+                        res.setHeader('content-type', 'text/css');
+                        res.send(200, response);
+                    });
+
+
+                });
+
+            })(address, part);
+
+        }
 
         var server = http.createServer(app);
         server.listen(config.port, function () {
