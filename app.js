@@ -68,7 +68,8 @@ module.exports = function () {
 
     var blocks_folders = fs.readdirSync(path.join(process.cwd(), 'blocks'));
     app.set('port', config.port || process.env.PORT || 3000);
-    app.set('views', path.join(__dirname, 'views'));
+//    app.set('views', path.join(__dirname, 'views'));
+    app.set('views', path.join(process.cwd(), 'blocks', 'main', 'backend', 'layout'));
     app.set('view engine', 'hjs');
     require('child_process').exec('npm ls --json', function (err, stdout, stderr) {
 
