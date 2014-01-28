@@ -754,7 +754,7 @@ and an empty style file (+ link from main.less in the app) are also added.
 
 #SEO with SmartBlocks
 
-As of v0.1.1, SmartBlocks supports Google's AJAX crawling system. When Google encounters links in your website
+As of v0.1.2, SmartBlocks supports Google's AJAX crawling system. When Google encounters links in your website
 containing '#!' for the local hash routing (used by Backbone, allowing a routing in single page apps), it replaces
 it by "?_escaped_fragment_=", thus sending any local hash parameters as a GET parameter to your server.
 
