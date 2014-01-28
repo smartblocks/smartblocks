@@ -15,8 +15,6 @@ define([
         launch: function () {
             var base = this;
             if (!base.get("restricted_to") || SmartBlocks.current_user.hasRight(base.get("restricted_to"))) {
-                SmartBlocks.Methods.startMainLoading("Loading " + base.get('name'), 2, false);
-
                 if (base.get("entry_point")) {
                     base.ready = false;
                     var block = SmartBlocks.Data.blocks.get(base.get("block_token"));
