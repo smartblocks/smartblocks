@@ -16,7 +16,8 @@ to [node-orm2][10].
 
 ##Installation
 
-> Please make sure you installed MongoDB and that it is running before trying to start the web app.
+> Please make sure you installed [MongoDB][12] and that it is running before trying to start the web app.
+> You also need to install [PhantomJs][9] for everything to work nicely.
 
 To install and try the current version of SmartBlocks, run the following command :
 
@@ -32,9 +33,9 @@ Now go in the created directory.
 
 Then you can start the web app to see if the install worked :
 
-    smartblocks start [mode]
+    smartblocks start
 
-The default mode is 'local', and makes your app run on the port 3000.
+You can add a mode to that command. The default mode is 'local', and makes your app run on the port 3000.
 The other modes are : 'staging' (4000) and 'production' (5000)
 
 You should see something like this in the console :
@@ -772,8 +773,16 @@ Crawlable][8].
 
 #License
 --------------------------------------------------
+
 Smartblocks is licensed under the AGPL v3.0 license.
 [http://www.tldrlegal.com/l/AGPL3][2]
+
+#Contributing
+--------------------------------------------------
+
+If you're interested and want to contribute, or if you just want to chat, you are most welcome. We are just starting
+and would love to create a little community around this project. You can send me an email if you want
+(see my page on github : [https://github.com/william26][11]).
 
 #More information about Smartblocks
 --------------------------------------------------
@@ -799,3 +808,5 @@ for example :
 [8]:https://developers.google.com/webmasters/ajax-crawling/?hl=iw
 [9]:http://phantomjs.org/
 [10]:https://github.com/dresende/node-orm2
+[11]:https://github.com/william26
+[12]:http://www.mongodb.org/

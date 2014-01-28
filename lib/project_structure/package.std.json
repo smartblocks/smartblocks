@@ -6,6 +6,6 @@
         "start": "smartblocks start"
     },
     "dependencies": {
-        "smartblocks": "~0.1.2"
+        "smartblocks": "~0.1.3"
     }
 }
