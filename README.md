@@ -7,10 +7,11 @@ the form of Single Page Applications.
 Its philosophy is to divide your features into several feature blocks, that will be easy to reuse and share. It
 provides a strong basic structure for your apps, so that it may be easier to work in several teams for bigger projects.
 
-It is based on Express and several other cool Node projects for the back end, and on Backbone.js / Require.js an such
-for the front-end. To hold data, it is currently based on MongoDB.
+It is based on Express and several other cool Node projects for the back end, and on Backbone.js / Require.js and such
+for the front-end. To hold data, it is currently based on MongoDB, but can be plugged to other database systems thanks
+to [node-orm2][10].
 
-##:Getting started
+##Getting started
 ------------------------------------
 
 ##Installation
@@ -58,7 +59,7 @@ You can then go to [http://localhost:3000][1]. You should see a welcome page.
 SmartBlocks allows you to create complex Single Paged Applications.
 
 It revolves around the concept of **blocks**. In SmartBlocks, a block is a feature module.
-
+-
 Whenever you want to develop a feature for your website, and that you think that it could be reused somewhere else,
 create a new block. That block can later be dropped in another project, which makes you gain a significant amount of
 time.
@@ -797,3 +798,4 @@ for example :
 [7]:https://github.com/dresende/node-orm2
 [8]:https://developers.google.com/webmasters/ajax-crawling/?hl=iw
 [9]:http://phantomjs.org/
+[10]:https://github.com/dresende/node-orm2
