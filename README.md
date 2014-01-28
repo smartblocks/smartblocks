@@ -10,7 +10,7 @@ provides a strong basic structure for your apps, so that it may be easier to wor
 It is based on Express and several other cool Node projects for the back end, and on Backbone.js / Require.js an such
 for the front-end. To hold data, it is currently based on MongoDB.
 
-##:Getting started
+##Getting started
 ------------------------------------
 
 ##Installation
