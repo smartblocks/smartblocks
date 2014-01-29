@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ site.title }} - Access restricted</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="fragment" content="!">
+    <link rel="stylesheet/less" type="text/css" href="_style" />
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Uncomment these lines if you have some block with some app to show for restricted page (log in/sign in, etc) -->
+    <!--<script src="/require.js" type="text/javascript"></script>-->
+    <!--<script type="text/javascript" src="/smartblocks-frontend.js"></script>-->
+    <!--<script type="text/javascript" src="/require-config.js"></script>-->
+
+    <!-- By default, jquery and less are included so you can play with the page in a traditional way -->
+    <!--<script src="/jquery.js" type="text/javascript"></script>-->
+    <!--<script src="/less.js" type="text/javascript"></script>-->
+</head>
+<body>
+<div class="unauthorized">
+    Sorry, this part of the website is restricted to authorized users only.<br/>
+    <a href="/">Go back to homepage</a>
+</div>
+<div id="__contents__"></div>
+</body>
+</html>

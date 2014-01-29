@@ -172,9 +172,9 @@ module.exports = function () {
         app.use(require('less-middleware')({ src: path.join(__dirname, 'public/build') }));
         app.use(express.static(path.join(__dirname, 'public/build')));
 
-        //registering static directory for layout related LESS files
-        if (fs.existsSync(path.join(process.cwd(), 'layouts', 'style'))) {
-            app.use('/_layout_style', express.static(path.join(process.cwd(), 'layouts', 'style')));
+        //registering static directory for layout related files
+        if (fs.existsSync(path.join(process.cwd(), 'layouts', 'static'))) {
+            app.use('/_layout_static', express.static(path.join(process.cwd(), 'layouts', 'static')));
         }
 
 
@@ -295,15 +295,25 @@ module.exports = function () {
             var part = config.parts[k];
             (function (address, part) {
                 app.all(address + ( address !== '/' ? '/' : ''), function (req, res) {
-                    if (part.layout) {
-                        res.render(part.layout, {
-                            site: config.site
-                        });
-                    } else {
-                        res.render('index', {
-                            site: config.site
-                        });
+                    var access_granted = part.access === true || part.access.length === 0;
+                    for (var k in part.access) {
+                        var right = part.access[k];
+                        access_granted = access_granted || req.session.rights && req.session.rights.indexOf(right) !== -1;
                     }
+                    if (access_granted) {
+                        if (part.layout) {
+                            res.render(part.layout, {
+                                site: config.site
+                            });
+                        } else {
+                            res.render('index', {
+                                site: config.site
+                            });
+                        }
+                    } else {
+                        res.redirect('/AccessRestricted/');
+                    }
+
                 });
 
 
@@ -344,9 +354,9 @@ module.exports = function () {
                     var blocks = sb_methods.getBlocks();
                     var response = '@import "/main.less";';
 
-                    fs.exists(path.join(process.cwd(), 'layouts', 'style', part.layout + '.less'), function (exists) {
+                    fs.exists(path.join(process.cwd(), 'layouts', 'static', 'style', part.layout + '.less'), function (exists) {
                         if (exists) {
-                            response += '\n@import "/_layout_style/' + part.layout + '";';
+                            response += '\n@import "/_layout_static/style/' + part.layout + '";';
                         }
                         for (var k in blocks) {
                             var block = blocks[k];
