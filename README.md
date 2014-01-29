@@ -60,7 +60,7 @@ You can then go to [http://localhost:3000][1]. You should see a welcome page.
 SmartBlocks allows you to create complex Single Paged Applications.
 
 It revolves around the concept of **blocks**. In SmartBlocks, a block is a feature module.
--
+
 Whenever you want to develop a feature for your website, and that you think that it could be reused somewhere else,
 create a new block. That block can later be dropped in another project, which makes you gain a significant amount of
 time.
