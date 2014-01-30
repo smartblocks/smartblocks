@@ -956,7 +956,6 @@ We're thinking about making a features store ;).
 The website will contain useful information for a more complete use than the one presented in this Readme, including
 for example :
 
-- Application subrouting
 - Shortcuts detection
 - Live exchange with socket.io (which is included in the framework)
 - User / session management, and user restricted blocks / apps
