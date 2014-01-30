@@ -5,7 +5,7 @@ define([
     "models/Application"
 ], function (_, Backbone, Block, Application) {
     var BlocksCollection = Backbone.Collection.extend({
-        url:"/Blocks",
+        url:"blocks",
         model:Block,
         reparse: function () {
             var base = this;

@@ -88,6 +88,10 @@ When you first init a smartblocks project, you'll get the following folder struc
             main/
                 ...
         config/
+        layouts/
+            index.hjs
+            style/
+                index.less
 
 The blocks folder contains all the blocks.
 
@@ -144,8 +148,26 @@ The 'all' object contains the following information :
                 block: 'main',
                 app: 'home'
             }
+        },
+        parts: { //allow you to create several separate single page environments : eg backoffice
+            "": { //creates an environment for / requests
+                blocks: 'all',
+                access: [],
+                layout: 'index',
+                entry: {
+                    block: 'main',
+                    app: 'home',
+                    url_params: []
+                }
+            },
+            "myBackoffice": { //example of a separate environment
+                ...
+            }
         }
     },
+
+The parts object in it allows you to create separate front-end environment, giving access to different blocks, and
+more importantly to different layouts.
 
 The other objects contain information for the database connection. For example, if you're using MongoDB, this will
 make your project use the 'exampleDB' database, and collections will be created for every model you create.
@@ -161,6 +183,57 @@ It also makes your app use the port 3000. You can change these settings for the 
     },
 
 By default your app is launched in the 'local' mode.
+
+##Site parts and layouts
+
+By default, you've got one predefined site part in the config file :
+
+     parts: { //allow you to create several separate single page environments : eg backoffice
+        "": { //creates an environment for / requests
+            blocks: 'all',
+            access: [],
+            layout: 'index',
+            entry: {
+                block: 'main',
+                app: 'home',
+                url_params: []
+            }
+        }
+    }
+
+You can add parts at will. To create a part, you need to add an object to the parts array above :
+
+    'urlPrefix'; {
+        blocks: 'all' //or ['main', 'myblock', 'backoffice'...],
+        access: ['list', 'of', 'rights' ],
+        layout: 'layout_name', //the layout must exist as a .hjs file in the /layouts folder
+                               //you can also add a .less file in /layouts/style with the same name,
+                               //which will be included when loading this part
+        entry: { //specify which app of which block is launched when the page loads
+            block: 'myBlock',
+            app: 'myApp',
+            url_params: [] //optional array of subparams for a routing in the given app
+        }
+    }
+
+You can then call this part of the website by adding the name in the url :
+
+    http://yoursite/urlPrefix/
+
+For example, you can create a backoffice part, for users with the 'admin' right, allowing them to play around with the
+site data.
+
+**Layouts**
+
+All layouts are stored in the /layouts directory. They contain :
+
+    <div id="__contents__"></div>
+
+This div is filled with the current app. You can add whatever you want around it. Headers, footers etc. However don't
+remove the stuff in the <head> tag as they include all the frontend bootstraping for everything to work nicely.
+
+The css for each layout must be stored in a .less file in /layouts/style. The .less file must have the same name as the
+layout.
 
 ##Blocks
 

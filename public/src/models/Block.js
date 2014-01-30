@@ -5,7 +5,7 @@ define([
 ], function (_, Backbone) {
     var Block = Backbone.Model.extend({
         idAttribute: 'name',
-        baseUrl:"/Blocks",
+        baseUrl:"blocks",
         defaults:{
             "color":"#024053"
         }
