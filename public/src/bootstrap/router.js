@@ -5,41 +5,35 @@ define([
     var initRouter = function (SmartBlocks) {
         SmartBlocks.basics.Router = Backbone.Router.extend({
             routes: {
-                "": "entry",
-                "!": "entry",
-                "!:appname": "launch_app",
-                ":appname": "launch_app",
-                "!:appname/:params": "launch_app",
-                ":appname/:params": "launch_app"
             },
             initialize: function () {
-                this.route(/^!([a-zA-Z]*?)\/(.*?)$/, "launch_app", this.launch_app);
+                this.route(/^!(.*?)$/, "launch_app", this.launch_app);
                 this.routesHit = 0;
                 Backbone.history.on('route', function () {
                     this.routesHit++;
                     SmartBlocks.events.trigger("url_changed");
                 }, this);
             },
-            entry: function () {
-                SmartBlocks.Url.params = {};
-                SmartBlocks.Url.appname = "";
-                SmartBlocks.Url.full = "";
-                SmartBlocks.Methods.entry();
-            },
-            launch_app: function (appname, params) {
+            launch_app: function (route) {
+                var apps = SmartBlocks.Data.apps.models;
+                route = route ? route : "";
+                for (var k in apps) {
+                    var app = apps[k];
 
-                SmartBlocks.Url.params = params ? params.split("/") : [];
-                SmartBlocks.Url.appname = appname;
-                SmartBlocks.Url.full = appname + "/" + params;
-                var app = SmartBlocks.Data.apps.where({
-                    name: appname
-                })[0];
-                if (app && (!SmartBlocks.current_app || SmartBlocks.current_app.get("name") != app.get("name"))) {
-                    app = SmartBlocks.Data.apps.get(app.get('name'));
-                    SmartBlocks.Methods.setApp(app);
-                } else {
-                    if (!app)
-                        SmartBlocks.Methods.entry();
+                    if (app.get('routing') !== undefined && (route == app.get('routing') || (app.get('routing') !== "" && route && route.indexOf(app.get('routing')) === 0))) {
+                        var re = new RegExp('^' + app.get('routing'), 'g');
+                        var params = route.replace(re, '');
+                        params = params.replace(/^\//, '');
+                        SmartBlocks.Url.params = params ? params.split('/') : [];
+                        SmartBlocks.Url.appname = app.get('name');
+                        SmartBlocks.Url.full = route;
+
+                        if (app && (!SmartBlocks.current_app || SmartBlocks.current_app.get("name") != app.get("name"))) {
+                            app = SmartBlocks.Data.apps.get(app.get('name'));
+                            SmartBlocks.Methods.setApp(app);
+                            break;
+                        }
+                    }
                 }
             },
             back: function () {
