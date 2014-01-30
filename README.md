@@ -14,7 +14,7 @@ to [node-orm2][10].
 ###Getting started
 ------------------------------------
 
-^###Installation
+####Installation
 
 > Please make sure you installed [MongoDB][12] and that it is running before trying to start the web app.
 > You also need to install [PhantomJs][9] for everything to work nicely.
