@@ -5,7 +5,7 @@
         {
             "name": "home",
             "entry_point": "launch_home",
-            "routing": ""
+            "routing": "home"
         }
     ],
     "types": [
