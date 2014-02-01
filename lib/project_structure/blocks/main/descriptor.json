@@ -4,7 +4,8 @@
     "apps": [
         {
             "name": "home",
-            "entry_point": "launch_home"
+            "entry_point": "launch_home",
+            "routing": "home"
         }
     ],
     "types": [

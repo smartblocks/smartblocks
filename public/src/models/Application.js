@@ -26,19 +26,6 @@ define([
                         base.routeit();
                     }
                     base.ready = true;
-
-
-
-//                    require([base.get("entry_point")], function (View) {
-//                        SmartBlocks.Methods.continueMainLoading(2);
-//                        var view = new View();
-//                        SmartBlocks.Methods.render(view);
-//                        view.init(base);
-//                        base.ready = true;
-//                        base.events.trigger("ready");
-//                        SmartBlocks.current_app = base;
-//                        base.routeit();
-//                    });
                 }
             } else {
                 SmartBlocks.basics.show_message("You don't have the rights to access this app");
@@ -70,15 +57,21 @@ define([
             var app_routes = base.get("routing");
             if (SmartBlocks.Url.params.length == 0) {
                 if (base.routes) {
-                    if (base.routes[""])
+                    if (base.routes[""] && base.lastroute !== base.routes[""]) {
                         base.routes[""].apply(base, parameters);
+                        base.lastroute = base.routes[""];
+                    }
+
                 }
                 return;
             }
             for (var k in base.routes) {
+
                 var route = base.routes[k];
+
                 var do_it = true;
                 var parameters = [];
+                k = k.replace(/^\//, '');
                 var route_params = k.split("/");
                 for (var j in SmartBlocks.Url.params) {
                     var param = SmartBlocks.Url.params[j];
@@ -96,8 +89,10 @@ define([
                 }
 
                 if (do_it) {
-                    if (base.routes)
+                    if (base.routes && SmartBlocks.Url.appname == base.get('name') && base.lastroute !== route) {
                         route.apply(base, parameters);
+                        base.lastroute = route;
+                    }
                     break;
                 }
 
